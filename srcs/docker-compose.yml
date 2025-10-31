@@ -1,18 +1,19 @@
-frontend:
-  build:
-    context: ./containers/frontend
-  ports: ["3000:3000"]
-  networks:
-    - camagru_network
-  depends_on:
-    - backend
+services:
+  frontend:
+    build:
+      context: ./containers/frontend
+    ports: ["3000:3000"]
+    networks:
+      - camagru_network
+    depends_on:
+      - backend
 
-backend:
-  build:
-    context: ./containers/backend
-  ports: ["8000:8000"]
-  networks:
-    - camagru_network
+  backend:
+    build:
+      context: ./containers/backend
+    ports: ["8000:8000"]
+    networks:
+      - camagru_network
 
 networks:
   camagru_network:
