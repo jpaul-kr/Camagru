@@ -4,6 +4,8 @@ services:
     build:
       context: ./containers/frontend
     ports: ["8080:80"]
+    env_file:
+      - ./.env
     networks:
       - camagru_network
     depends_on:
@@ -14,6 +16,8 @@ services:
     build:
       context: ./containers/backend
     ports: ["3000:3000"]
+    env_file:
+      - ./.env
     networks:
       - camagru_network
 
