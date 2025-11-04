@@ -11,6 +11,7 @@ export function routeHandler(req, res) {
   const {url, method} = req;
 
   const path = routes[url];
+
   if (!path || path.METHOD !== method) {
     res.statusCode = 404;
     res.end('Not Found');

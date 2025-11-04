@@ -1,4 +1,5 @@
 export const getNumber = (req, res) => {
+  console.log('entered getNumber');
   res.writeHead(200, {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': 'http://localhost:8080',

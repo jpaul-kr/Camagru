@@ -1,11 +1,24 @@
 services:
+  proxy:
+    container_name: proxy
+    build:
+      context: ./containers/proxy
+    ports: ["8443:443"]
+    env_file:
+      - .env
+    networks:
+      - camagru_network
+    depends_on:
+      - frontend
+      - backend
+  
   frontend:
     container_name: frontend
     build:
       context: ./containers/frontend
-    ports: ["8080:80"]
+    ports: ["5000:5000"]
     env_file:
-      - ./.env
+      - .env
     networks:
       - camagru_network
     depends_on:
@@ -17,7 +30,7 @@ services:
       context: ./containers/backend
     ports: ["3000:3000"]
     env_file:
-      - ./.env
+      - .env
     networks:
       - camagru_network
 
