@@ -20,8 +20,8 @@ WORKDIR /usr/local/
 RUN git clone --branch v4.0.0 https://github.com/coreruleset/coreruleset.git
 RUN mv coreruleset owasp-crs
 RUN mv owasp-crs/rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf.example owasp-crs/rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf
-#RUN rm owasp-crs/crs-setup.conf.example
-#RUN rm owasp-crs/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf.example
+RUN rm owasp-crs/crs-setup.conf.example
+RUN mv owasp-crs/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf.example owasp-crs/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf
 
 WORKDIR /opt/ModSecurity
 RUN git submodule init && git submodule update
@@ -51,13 +51,14 @@ RUN  ./configure \
  	--with-cc-opt='-g -O2 -ffile-prefix-map=/data/builder/debuild/nginx-1.24.0/debian/debuild-base/nginx-1.24.0=. -fstack-protector-strong -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -fPIC' --with-ld-opt='-Wl,-z,relro -Wl,-z,now -Wl,--as-needed -pie' \
  	--add-dynamic-module=../ModSecurity-nginx 
 
-
 RUN make modules
 RUN mkdir -p /etc/nginx/modules
 RUN cp objs/ngx_http_modsecurity_module.so /etc/nginx/modules
+RUN rm /opt/ModSecurity/modsecurity.conf-recommended
 
-COPY ./conf/modsecurity.conf /opt/ModSecurity/modsecurity.conf-recommended
+COPY ./conf/modsecurity.conf /opt/ModSecurity/modsecurity.conf
 COPY ./conf/main.conf /opt/main.conf
+COPY ./conf/owasp-crs/crs-setup.conf /usr/local/owasp-crs/crs-setup.conf
 
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
