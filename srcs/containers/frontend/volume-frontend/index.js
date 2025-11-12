@@ -4,11 +4,29 @@
 const apiUrl = 'http://localhost:3000';
 console.log("apiUrl: " + apiUrl);
 
-async function main() {
+function loadCSS(path) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = path;
+    document.head.appendChild(link);
+  }
+
+function createTitle() {
     const top = document.createElement('div');
-    top.textContent = "Volume Frontend Loaded";
+    top.classList.add('top');
+
+    const title = document.createElement('h1');
+    title.classList.add('title');
+    title.textContent = "Camagru";
+    top.appendChild(title);
     document.body.appendChild(top);
+    return top;
+}
+
+async function main() {
     try {
+        loadCSS('./style.css');
+        const top = createTitle();
         const main = document.createElement('div');
         const res = await fetch(`${apiUrl}/get-number`);
         const data = await res.json();
