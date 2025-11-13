@@ -19,6 +19,11 @@ function createTitle() {
     title.classList.add('title');
     title.textContent = "Camagru";
     top.appendChild(title);
+
+    const logo = document.createElement('img');
+    logo.src = './images/logo.png';
+    top.appendChild(logo);
+    
     document.body.appendChild(top);
     return top;
 }
