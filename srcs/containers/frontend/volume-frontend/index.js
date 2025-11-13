@@ -2,13 +2,18 @@
 //import dotenv from 'dotenv';
 
 const apiUrl = 'http://localhost:3000';
-console.log("apiUrl: " + apiUrl);
 
-function loadCSS(path) {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = path;
-    document.head.appendChild(link);
+function loadStyles(cssPath, faviconPath) {
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = cssPath;
+    document.head.appendChild(css);
+
+    const favicon = document.createElement('link');
+    favicon.rel = 'icon';
+    favicon.type = 'image/png';
+    favicon.href = faviconPath;
+    document.head.appendChild(favicon);
   }
 
 function createTitle() {
@@ -21,6 +26,8 @@ function createTitle() {
     top.appendChild(title);
 
     const logo = document.createElement('img');
+    logo.style.height = "100%";
+    logo.style.width = "200px";
     logo.src = './images/logo.png';
     top.appendChild(logo);
     
@@ -30,7 +37,7 @@ function createTitle() {
 
 async function main() {
     try {
-        loadCSS('./style.css');
+        loadStyles('./style.css', './images/logo.png');
         const top = createTitle();
         const main = document.createElement('div');
         const res = await fetch(`${apiUrl}/get-number`);

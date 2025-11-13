@@ -6,7 +6,7 @@ WORKDIR /usr/share/nginx/
 
 COPY ./conf/package.json /package.json
 
-COPY ./volume-frontend/public/favicon.ico /favicon.ico
+#COPY ./volume-frontend/public/favicon.ico /favicon.ico
 #COPY ./volume-frontend/public/.well-known /app/.well-known
 
 COPY ./volume-frontend/public/index.html /usr/share/nginx/html/index.html
