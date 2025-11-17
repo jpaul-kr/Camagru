@@ -1,5 +1,6 @@
 
 //import dotenv from 'dotenv';
+import { loginPage } from './volume-frontend/pages/login/login.js';
 
 const apiUrl = 'http://localhost:3000';
 
@@ -11,12 +12,12 @@ function loadStyles(cssPath, faviconPath) {
 
     const favicon = document.createElement('link');
     favicon.rel = 'icon';
-    favicon.type = 'image/png';
+    favicon.type = 'image/icon';
     favicon.href = faviconPath;
     document.head.appendChild(favicon);
   }
 
-function createTitle() {
+function createTop() {
     const top = document.createElement('div');
     top.classList.add('top');
 
@@ -30,22 +31,31 @@ function createTitle() {
     logo.style.width = "200px";
     logo.src = './images/logo.png';
     top.appendChild(logo);
+    top.id = "top_section";
     
     document.body.appendChild(top);
     return top;
 }
 
+function createMain() {
+    const main = document.createElement('div');
+    main.classList.add('main');
+    loginPage(main);
+    document.body.appendChild(main);
+    return main;
+}
+
 async function main() {
     try {
-        loadStyles('./style.css', './images/logo.png');
-        const top = createTitle();
-        const main = document.createElement('div');
-        const res = await fetch(`${apiUrl}/get-number`);
-        const data = await res.json();
-        const number = data.result;
-        main.textContent = `Number from backend: ${number}`;
+        loadStyles('./style.css', './favicon.ico');
+        const page = document.createElement('div');
+        page.classList.add('page');
+        const top = createTop();
+        const main = createMain();
         
-        document.body.appendChild(main);
+        page.appendChild(top);
+        page.appendChild(main);
+        document.body.appendChild(page);
         console.log("Volume Frontend is running");
         console.log("Volume Backend is " + apiUrl);
     } catch (error) {

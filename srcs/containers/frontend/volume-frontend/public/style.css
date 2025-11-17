@@ -1,3 +1,11 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 1000px;
+}
+
 .top {
     background-color: #FFC200;
     display: flex;
@@ -17,4 +25,45 @@
     font-size: 120px;
     border-color: black;
     font-family: "Action Man";
+}
+
+.main {
+    display: flex;
+    background-color: #F7F0F0;
+    width: 100%;
+    height: 800px;
+    justify-content: center;
+    align-items: center;
+}
+.login {
+    display: flex;
+    flex-direction: horizontal;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.login-welcome {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    margin-bottom: 50px;
+    margin-right: 100px;
+    color: #FFC200;
+    font-family: "Action Man";
+    font-size: 100px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 800px;
+    height: 600px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: #878787 0px 8px 16px;
 }
