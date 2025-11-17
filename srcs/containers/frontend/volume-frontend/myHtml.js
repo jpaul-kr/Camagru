@@ -1,0 +1,25 @@
+export class MyHtml {
+
+    constructor() {}
+
+    static createElement(type, style) {
+        const element = document.createElement(type);
+        element.classList.add(style);
+        return element;
+    }
+
+    static createSubElement(parent, type, style, numElements, direction) {
+        const element = document.createElement(type);
+        if (style)
+            element.classList.add(style);
+        if (numElements && numElements > 1)
+        {
+            if (direction === "row" || null) // row
+                element.style.width = (100 / numElements) + "%";
+            if (direction === "col" || null) // column
+                element.style.height = (100 / numElements) + "%";
+        }
+        parent.appendChild(element);
+        return element;
+    }
+}

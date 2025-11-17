@@ -35,9 +35,17 @@
     justify-content: center;
     align-items: center;
 }
+
+.div-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .login {
     display: flex;
-    flex-direction: horizontal;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     width: 100%;
@@ -49,19 +57,31 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 50%;
+    width: 100%;
     margin-bottom: 50px;
-    margin-right: 100px;
     color: #FFC200;
     font-family: "Action Man";
     font-size: 100px;
 }
 
-.login-form {
+.login-instruction {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 800px;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+    color: #878787;
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    text-align: center;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 500px;
     height: 600px;
     background-color: white;
     border-radius: 8px;

@@ -1,30 +1,23 @@
+import { MyHtml } from "../../../myHtml.js"; 
+
 export function loginPage(main) {
-    const loginContainer = document.createElement('div');
-    loginContainer.classList.add('login');
+    const loginContainer = MyHtml.createElement('div', 'login');
+
     // main.appendChild(loginContainer);
 
-    const welocomeMessage = document.createElement('div');
-    welocomeMessage.classList.add('login-welcome');
-    welocomeMessage.textContent = "Welcome to\n Camagru.";
+    const welcomeContainer = MyHtml.createSubElement(loginContainer, 'div', "div-column", 2, "row");
+    const welocomeMessage = MyHtml.createSubElement(welcomeContainer, 'div', 'login-welcome', 3, "col");
+    welocomeMessage.textContent = "Welcome to Camagru.";
+    const introMessage = MyHtml.createSubElement(welcomeContainer, 'div', null, 3, "col");
+    introMessage.style.fontSize = "30px";
+    introMessage.style.width = "80%";
+    introMessage.textContent = "The best place to share your custom photos with friends and family.";
+    const instructionMessage = MyHtml.createSubElement(welcomeContainer, 'div', 'login-instruction', 3, "col");
+    instructionMessage.textContent = "Please login to continue.";
 
-    // const welcomeTitle = document.createElement('h1');
-    // welcomeTitle.textContent = "Welcome to Camagru";
+    const formContainer = MyHtml.createSubElement(loginContainer, 'div', 'login', 2, "row"); 
 
-    const formContainer = document.createElement('div');
-    formContainer.style.width = "50%";
-    formContainer.style.justifyContent = "center";
-    formContainer.style.alignItems = "center";
-    formContainer.style.display = "flex";  
+    const loginForm = MyHtml.createSubElement(formContainer, 'form', 'login-form', 1, "row");
 
-    const loginForm = document.createElement('form');
-    loginForm.classList.add('login-form');
-    formContainer.appendChild(loginForm);
-
-    const title = document.createElement('h2');
-    title.textContent = "Login";
-
-    loginForm.appendChild(title);
-    loginContainer.appendChild(welocomeMessage);
-    loginContainer.appendChild(formContainer);
     main.appendChild(loginContainer);
 }

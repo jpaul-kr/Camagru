@@ -16,6 +16,7 @@ RUN mv ./volume-frontend/fonts/ ./fonts/
 RUN mv ./volume-frontend/images/ ./images/
 RUN mv ./images/favicon.ico ./favicon.ico
 RUN mv ./volume-frontend/index.js ./index.js
+RUN mv ./volume-frontend/myHtml.js ./myHtml.js
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 5000
