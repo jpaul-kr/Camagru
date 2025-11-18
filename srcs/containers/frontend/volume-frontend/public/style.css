@@ -41,6 +41,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 .login {
@@ -62,6 +63,7 @@
     color: #FFC200;
     font-family: "Action Man";
     font-size: 100px;
+    margin-left: 190px;
 }
 
 .login-instruction {
@@ -75,6 +77,7 @@
     font-family: Arial, sans-serif;
     font-size: 20px;
     text-align: center;
+    margin-left: 190px;
 }
 
 .login-form {
@@ -82,8 +85,60 @@
     flex-direction: column;
     align-items: center;
     width: 500px;
-    height: 600px;
+    height: 500px;
     background-color: white;
     border-radius: 8px;
     box-shadow: #878787 0px 8px 16px;
+    margin-right: 221px;
+}
+
+.login-input {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 80%;
+    margin-top: 46px;
+    padding: 15px;
+    border: 2px solid #B0B0B0;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    padding: 27px;
+    margin-bottom: 10px;
+}
+
+.login-button {
+    background-color: #FFC200;
+    color: white;
+    justify-content: center;
+    width: 80%;
+    border: none;
+    border-radius: 6px;
+    line-height: 58px;
+    font-size: 21px;
+    font-weight: 750;
+    margin-top: 15px;
+}
+
+.login-createaccount-button {
+    background-color: #3CF03C;
+    color: white;
+    border: none;
+    width: 80%;
+    font-size: 21px;
+    font-weight: 750;
+    margin-bottom: 23px;
+    line-height: 58px;
+    border-radius: 6px;
+
+}
+
+.login-forgotpassword {
+    margin-bottom: 18px;
+    color: #2111a0;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    text-decoration: underline;
+    cursor: pointer;
 }
