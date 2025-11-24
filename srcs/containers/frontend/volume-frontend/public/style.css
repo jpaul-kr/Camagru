@@ -142,3 +142,29 @@
     text-decoration: underline;
     cursor: pointer;
 }
+
+.register-button {
+    background-color: #3CF03C;
+    color: white;
+    border: none;
+    width: 50%;
+    font-size: 21px;
+    font-weight: 750;
+    margin-bottom: 23px;
+    line-height: 58px;
+    border-radius: 6px;
+}
+
+.register-goback-button
+{
+    background-image: url('./images/goBack.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: none;
+    width: 58px;
+    height: 58px;
+    margin-bottom: 23px;
+    margin-right: 20px;
+    line-height: 58px;
+    border-radius: 6px;
+}

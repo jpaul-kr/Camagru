@@ -14,9 +14,9 @@ export class MyHtml {
             element.classList.add(style);
         if (numElements && numElements > 1)
         {
-            if (direction === "row" || null) // row
+            if (direction === "hor" || null) // row
                 element.style.width = (100 / numElements) + "%";
-            if (direction === "col" || null) // column
+            if (direction === "ver" || null) // column
                 element.style.height = (100 / numElements) + "%";
         }
         parent.appendChild(element);

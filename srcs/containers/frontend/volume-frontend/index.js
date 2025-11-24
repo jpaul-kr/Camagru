@@ -40,7 +40,9 @@ function createTop() {
 function createMain() {
     const main = document.createElement('div');
     main.classList.add('main');
-    loginPage(main);
+    main.id = "main-section";
+    const loginContainer = loginPage(main);
+    //main.appendChild(loginContainer);
     document.body.appendChild(main);
     return main;
 }
