@@ -8,10 +8,13 @@ export class MyHtml {
         return element;
     }
 
-    static createSubElement(parent, type, style, numElements, direction) {
+    static createSubElement(parent, type, styles, numElements, direction) {
         const element = document.createElement(type);
-        if (style)
-            element.classList.add(style);
+        if (styles)
+        {
+            for (const style of styles.split(" "))
+                element.classList.add(style);
+        }
         if (numElements && numElements > 1)
         {
             if (direction === "hor" || null) // row

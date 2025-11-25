@@ -26,13 +26,14 @@ function createLoginForm(formContainer) {
     forgotPasswordLink.href = "#";
     forgotPasswordLink.textContent = "Forgot Password?";
     forgotPasswordDiv.style.borderBottom = "2px solid #B0B0B0";
+    forgotPasswordDiv.style.width = "90%";
     forgotPasswordLink.addEventListener('click', forgotPasswordCall);
 
-    const loginButton = MyHtml.createSubElement(loginButtonDiv, 'button', 'login-button', 1, "hor");
+    const loginButton = MyHtml.createSubElement(loginButtonDiv, 'button', 'button login-button', 1, "hor");
     loginButton.type = "submit";
     loginButton.textContent = "Login";
 
-    const createAccountButton = MyHtml.createSubElement(createAccountDiv, 'button', 'login-createaccount-button', 1, "hor");
+    const createAccountButton = MyHtml.createSubElement(createAccountDiv, 'button', 'button login-createaccount-button', 1, "hor");
     createAccountButton.type = "button";
     createAccountButton.textContent = "Create Account";
     createAccountButton.addEventListener('click', createAccountPage);

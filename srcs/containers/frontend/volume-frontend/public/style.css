@@ -36,6 +36,20 @@
     align-items: center;
 }
 
+.button {
+    transition: 0.2s ease;
+    cursor: pointer;
+}
+
+.button:hover {
+    filter: brightness(1.15);
+}
+
+.button:active {
+    transform: scale(0.95);
+    filter: brightness(0.85);
+}
+
 .div-column {
     display: flex;
     flex-direction: column;
@@ -160,7 +174,8 @@
     background-image: url('./images/goBack.png');
     background-size: cover;
     background-repeat: no-repeat;
-    border: none;
+    border-color: black;
+    border-width: 3px;
     width: 58px;
     height: 58px;
     margin-bottom: 23px;

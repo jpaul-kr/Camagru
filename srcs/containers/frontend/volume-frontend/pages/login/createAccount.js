@@ -1,8 +1,59 @@
 import { MyHtml } from "../../../myHtml.js";
 import { loginPage } from "./login.js";
 
+function addImage(resultContainer, isOk) {
+    const result = document.createElement('img');
+    result.src = (isOk ? '../../../images/success.png' : '../../../images/failure.png');
+
+    resultContainer.innerHTML = '';
+    result.style.height = "160px";
+    result.style.width = "160px";
+    result.style.marginTop = "35px";
+    resultContainer.appendChild(result);
+}
+
+function registrationFormHandler(event) {
+    event.preventDefault();
+    console.log("Register button clicked");
+    const usernameInput = document.getElementById("register-username-input");
+    const emailInput = document.getElementById("register-email-input");
+    const password1Input = document.getElementById("register-password1-input");
+    const password2Input = document.getElementById("register-password2-input");
+    const resultContainer = document.getElementById("register-result-container");
+
+    const username = usernameInput.value.trim();
+    const email = emailInput.value.trim();
+    const password1 = password1Input.value;
+    const password2 = password2Input.value;
+
+    if (!username || !email || !password1 || !password2) {
+        addImage(resultContainer, false);
+        setTimeout(() => {
+            alert("Please fill in all fields.");
+        }, 50);
+        return;
+    }
+
+    if (password1 !== password2) {
+        addImage(resultContainer, false);
+        setTimeout(() => {
+            alert("Passwords do not match.");
+        }, 50);
+        return;
+    }
+
+    // Here you would typically send the registration data to the server
+    console.log("Registering user:", { username, email, password: password1 });
+
+    addImage(resultContainer, true);
+    setTimeout(() => {
+        alert("Registration successful! You can now log in.");
+    }, 50);
+}
+
 function createRegisterForm(formContainer) {
     const registerForm = MyHtml.createSubElement(formContainer, 'form', 'login-form', 1, "hor");
+    registerForm.id = "register-form";
     registerForm.style.marginRight = "0px";
     const arrayDiv = [];
 
@@ -49,11 +100,11 @@ function createRegisterForm(formContainer) {
     goBackButtonDiv.style.width = "34%";
     goBackButtonDiv.style.alignItems = "flex-end";
 
-    const registerButton = MyHtml.createSubElement(registerButtonDiv, 'button', 'register-button', 1, "hor");
-    registerButton.type = "submit";
+    const registerButton = MyHtml.createSubElement(registerButtonDiv, 'button', 'button register-button', 1, "hor");
+    registerButton.type = "button";
     registerButton.textContent = "Register";
 
-    const goBackButton = MyHtml.createSubElement(goBackButtonDiv, 'button', 'register-goback-button', 1, "hor");
+    const goBackButton = MyHtml.createSubElement(goBackButtonDiv, 'button', 'bvutton register-goback-button', 1, "hor");
     goBackButton.type = "button";
 
     goBackButton.addEventListener('click', () => {
@@ -64,6 +115,8 @@ function createRegisterForm(formContainer) {
         const main = document.getElementById("main-section");
         loginPage(main);
     });
+
+    registerButton.addEventListener('click', registrationFormHandler);
 
     return registerForm;
 }
@@ -84,6 +137,7 @@ export function createAccountPage() {
     registerContainer.style.flexDirection = "column";
 
     const resultContainer = MyHtml.createSubElement(registerContainer, 'div', 'div-column', 2, "ver");
+    resultContainer.id = "register-result-container";
     resultContainer.style.height = "20%";
 
     const formContainer = MyHtml.createSubElement(registerContainer, 'div', 'div-column', 2, "ver");
