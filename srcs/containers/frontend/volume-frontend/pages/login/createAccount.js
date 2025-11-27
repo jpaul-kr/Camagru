@@ -104,7 +104,7 @@ function createRegisterForm(formContainer) {
     registerButton.type = "button";
     registerButton.textContent = "Register";
 
-    const goBackButton = MyHtml.createSubElement(goBackButtonDiv, 'button', 'bvutton register-goback-button', 1, "hor");
+    const goBackButton = MyHtml.createSubElement(goBackButtonDiv, 'button', 'button register-goback-button', 1, "hor");
     goBackButton.type = "button";
 
     goBackButton.addEventListener('click', () => {

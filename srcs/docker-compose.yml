@@ -12,6 +12,16 @@ services:
       - frontend
       - backend
   
+  vault:
+    container_name: vault
+    build:
+      context: ./containers/vault
+    ports: ["8200:8200"]
+    env_file:
+      - .env
+    networks:
+      - camagru_network
+
   frontend:
     container_name: frontend
     build:

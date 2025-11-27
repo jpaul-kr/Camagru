@@ -17,7 +17,7 @@
 
 @font-face {
     font-family: "Action Man";
-    src: url("./fonts/Action_Man_Bold.ttf") format("truetype");
+    src: url("./fonts/ActionMan-Bold.woff2") format("woff2");
 }
 
 .title {
