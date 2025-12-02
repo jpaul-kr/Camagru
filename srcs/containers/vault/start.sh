@@ -8,6 +8,19 @@ until curl -k --silent http://localhost:8200/v1/sys/health | grep '"initialized"
     sleep 2
 done
 
-vault operator init
+vault operator init > init.txt
+
+vault operator unseal $(grep 'Unseal Key 1:' init.txt | awk '{print $4}')
+vault operator unseal $(grep 'Unseal Key 2:' init.txt | awk '{print $4}')
+vault operator unseal $(grep 'Unseal Key 3:' init.txt | awk '{print $4}')
+
+vault login $(grep 'Initial Root Token:' init.txt | awk '{print $4}')
+
+vault policy write vault-policy /opt/vault/vault.hcl
+vault secrets enable -path=Camagru kv
+
+vault token create -policy=vault-policy -orphan -id=$VAULT_TOKEN_ID
+
+vault kv put Camagru/hello_world foo=bar
 
 wait $VAULT_PID

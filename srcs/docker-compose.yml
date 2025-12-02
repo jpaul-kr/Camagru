@@ -43,6 +43,16 @@ services:
       - .env
     networks:
       - camagru_network
+  
+  database:
+    container_name: mariadb
+    build:
+      context: ./containers/database
+    ports: ["3306:3306"]
+    env_file:
+      - .env
+    networks:
+      - camagru_network
 
 networks:
   camagru_network:
