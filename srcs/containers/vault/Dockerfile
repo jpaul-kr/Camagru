@@ -15,6 +15,7 @@ RUN CODENAME=$(grep VERSION_CODENAME /etc/os-release | cut -d= -f2) && \
 RUN apt update -y && apt install vault -y
 
 COPY ./conf/vault.hcl /opt/vault/vault.hcl
+COPY ./conf/vault-policy.hcl /opt/vault/vault-policy.hcl
 COPY ./start.sh /opt/vault/start.sh
 RUN chmod +x /opt/vault/start.sh
 

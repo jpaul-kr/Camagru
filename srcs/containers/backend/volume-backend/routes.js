@@ -1,4 +1,4 @@
-import { getNumber } from "./getNumber.js";
+import { getNumber } from "./api/getNumber.js";
 
 export const routes = {
   '/get-number': {

@@ -17,6 +17,11 @@ services:
     build:
       context: ./containers/vault
     ports: ["8200:8200"]
+    healthcheck:
+      test: ["CMD", "curl", "-k", "http://localhost:8200/v1/sys/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
     env_file:
       - .env
     networks:
@@ -43,12 +48,15 @@ services:
       - .env
     networks:
       - camagru_network
+    depends_on:
+      vault:
+        condition: service_healthy
   
   database:
     container_name: mariadb
     build:
       context: ./containers/database
-    ports: ["3306:3306"]
+    ports: ["3300:3300"]
     env_file:
       - .env
     networks:
