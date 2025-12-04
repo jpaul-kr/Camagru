@@ -1,9 +1,9 @@
-import { getNumber } from "./api/getNumber.js";
+import { registerUser } from "./api/register.js";
 
 export const routes = {
-  '/get-number': {
-    METHOD: 'GET',
-    HANDLER: getNumber
+  '/register-user': {
+    METHOD: 'POST',
+    HANDLER: registerUser
   }
 }
 
