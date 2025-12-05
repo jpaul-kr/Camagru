@@ -1,5 +1,6 @@
 import { MyHtml } from "../../../myHtml.js";
 import { loginPage } from "./login.js";
+import { register } from "./register.js";
 
 function addImage(resultContainer, isOk) {
     const result = document.createElement('img');
@@ -44,7 +45,7 @@ function registrationFormHandler(event) {
 
     // Here you would typically send the registration data to the server
     console.log("Registering user:", { username, email, password: password1 });
-
+    register(username, email, password1);
     addImage(resultContainer, true);
     setTimeout(() => {
         alert("Registration successful! You can now log in.");

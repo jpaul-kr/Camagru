@@ -14,14 +14,18 @@ export async function registerUser(req, res) {
 
             const result = await conn.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, password]);
 
-            res.end(JSON.stringify({success: true, userId: result.insertId}));
+            console.log('llega1');
             conn.release();
+            console.log('llega2');
+            res.end(JSON.stringify({success: true, userId: result.insertId}));
+            console.log('llega3');
         }
-        catch {
+        catch (error) {
             res.writeHead(500, {
                 'Content-Type': 'application/json',
             });
-            res.end(JSON.stringify({success: false, error: 'Internal Server Error'}));
+            //console.error('Error registrating user: ', error.message);
+            res.end(JSON.stringify({success: false, error: error.message}));
             return;
         }
     });

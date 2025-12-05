@@ -1,6 +1,6 @@
 export async function register(username, email, password) {
     try {
-        const response = await fetch(`${process.env.BACKEND_ADDR}/api/register-user`, {
+        const response = await fetch(`http://localhost:8443/backend/register-user`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -10,7 +10,7 @@ export async function register(username, email, password) {
         const data = await response.json();
     }
     catch (error) {
-        console.error('Error registrating user: '. error.message);
+        console.error('Error registrating user: ', error.message);
     }
 
 }

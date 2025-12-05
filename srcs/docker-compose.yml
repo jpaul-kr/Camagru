@@ -51,14 +51,17 @@ services:
     depends_on:
       vault:
         condition: service_healthy
+      database:
+        condition: service_healthy
   
   database:
     container_name: mariadb
     build:
       context: ./containers/database
     ports: ["3300:3300"]
-    env_file:
-      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: camagru
     networks:
       - camagru_network
 
