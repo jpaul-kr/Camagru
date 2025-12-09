@@ -13,7 +13,7 @@ function addImage(resultContainer, isOk) {
     resultContainer.appendChild(result);
 }
 
-function registrationFormHandler(event) {
+async function registrationFormHandler(event) {
     event.preventDefault();
     console.log("Register button clicked");
     const usernameInput = document.getElementById("register-username-input");
@@ -45,7 +45,14 @@ function registrationFormHandler(event) {
 
     // Here you would typically send the registration data to the server
     console.log("Registering user:", { username, email, password: password1 });
-    register(username, email, password1);
+    const data = await register(username, email, password1);
+    if (data.success === false) {
+        addImage(resultContainer, false);
+        setTimeout(() => {
+            alert(`Registration failed: ${data.error}`);
+        }, 50);
+        return;
+    }
     addImage(resultContainer, true);
     setTimeout(() => {
         alert("Registration successful! You can now log in.");
@@ -105,7 +112,7 @@ function createRegisterForm(formContainer) {
     registerButton.type = "button";
     registerButton.textContent = "Register";
 
-    const goBackButton = MyHtml.createSubElement(goBackButtonDiv, 'button', 'button register-goback-button', 1, "hor");
+    const goBackButton = MyHtml.createSubElement(goBackButtonDiv, 'button', 'register-goback-button', 1, "hor");
     goBackButton.type = "button";
 
     goBackButton.addEventListener('click', () => {

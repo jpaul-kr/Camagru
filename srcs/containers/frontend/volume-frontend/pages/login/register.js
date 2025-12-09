@@ -8,9 +8,9 @@ export async function register(username, email, password) {
             body: JSON.stringify({username, email, password}),
         });
         const data = await response.json();
+        return data;
     }
     catch (error) {
         console.error('Error registrating user: ', error.message);
     }
-
 }

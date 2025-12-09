@@ -174,12 +174,15 @@
     background-image: url('./images/goBack.png');
     background-size: cover;
     background-repeat: no-repeat;
-    border-color: black;
-    border-width: 3px;
     width: 58px;
     height: 58px;
     margin-bottom: 23px;
     margin-right: 20px;
     line-height: 58px;
-    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.register-goback-button:active {
+    transform: scale(0.9);
 }
