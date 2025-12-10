@@ -6,26 +6,27 @@ async function isValidEmail(email, conn) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email))
             return false;
-        const [rows] = await conn.query('SELECT COUNT(*) AS count FROM users WHERE email = ?', [email]);
+
+        const rows = await conn.query('SELECT COUNT(*) AS count FROM users WHERE email = ?', [email]);
         console.log('count email: ' + rows[0].count);
-        return (rows[0].count === 0 ? true : false);
+        return (rows[0].count == 0 ? true : false);
     }
     catch (error) {
         console.error('Error validating email: ', error.message);
-        return false;
     }
+    return false;
 }
 
 async function isValidUsername(username, conn) {
     try{
-        const [rows] = await conn.query('SELECT COUNT(*) AS count FROM users WHERE username = ?', [username]);
+        const rows = await conn.query('SELECT COUNT(*) AS count FROM users WHERE username = ?', [username]);
         console.log('count username: ' + rows[0].count);
-        return (rows[0].count === 0 ? true : false);
+        return (rows[0].count == 0 ? true : false);
     }
     catch (error) {
         console.error('Error validating username: ', error.message);
-        return false;
     }
+    return false;
 }
 
 export async function registerUser(req, res) {
@@ -35,22 +36,28 @@ export async function registerUser(req, res) {
     });
     req.on("end", async () => {
         req.body = JSON.parse(body);
-
+        
         const {username, email, password} = req.body;
         try {
             const conn = await db.getConnection();
             const hashPassword = bcrypt.hashSync(password, 12);
             
-            if (isValidUsername(username, conn) === false)
+            const validUsername = await isValidUsername(username, conn);
+            console.log('validUsername: ' + validUsername);
+            if (validUsername === false)
             {
+                console.log('llega1');
                 res.writeHead(400, {
                     'Content-Type': 'application/json',
                 });
                 res.end(JSON.stringify({success: false, error: 'Username already exists'}));
                 return;
             }
-            if (isValidEmail(email, conn) === false)
+            const validEmail = await isValidEmail(email, conn);
+            console.log('validEmail: ' + validEmail);
+            if (validEmail === false)
             {
+                console.log('llega2');
                 res.writeHead(400, {
                     'Content-Type': 'application/json',
                 });
@@ -59,11 +66,8 @@ export async function registerUser(req, res) {
             }
             const result = await conn.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, hashPassword]);
 
-            console.log('llega1');
             conn.release();
-            console.log('llega2');
             res.end(JSON.stringify({success: true}));
-            console.log('llega3');
         }
         catch (error) {
             res.writeHead(500, {
