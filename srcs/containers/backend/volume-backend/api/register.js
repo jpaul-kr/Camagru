@@ -4,15 +4,20 @@ import bcrypt from 'bcryptjs';
 async function isValidEmail(email, conn) {
     try{
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email))
+        if (!emailRegex.test(email)) {
+            console.log('Email regex validation failed for: ' + email);
             return false;
+        }
 
         const rows = await conn.query('SELECT COUNT(*) AS count FROM users WHERE email = ?', [email]);
-        console.log('count email: ' + rows[0].count);
-        return (rows[0].count == 0 ? true : false);
+        const result = Number(rows[0].count);  // Convert bigint to number
+        console.log('count email: ' + result + ', type: ' + typeof result);
+        const isValid = result === 0;
+        console.log('isValid (email): ' + isValid);
+        return isValid;
     }
     catch (error) {
-        console.error('Error validating email: ', error.message);
+        console.error('Error validating email: ', error.message, error.stack);
     }
     return false;
 }
@@ -20,11 +25,14 @@ async function isValidEmail(email, conn) {
 async function isValidUsername(username, conn) {
     try{
         const rows = await conn.query('SELECT COUNT(*) AS count FROM users WHERE username = ?', [username]);
-        console.log('count username: ' + rows[0].count);
-        return (rows[0].count == 0 ? true : false);
+        const result = Number(rows[0].count);  // Convert bigint to number
+        console.log('count username: ' + result + ', type: ' + typeof result);
+        const isValid = result === 0;
+        console.log('isValid (username): ' + isValid);
+        return isValid;
     }
     catch (error) {
-        console.error('Error validating username: ', error.message);
+        console.error('Error validating username: ', error.message, error.stack);
     }
     return false;
 }
@@ -47,9 +55,9 @@ export async function registerUser(req, res) {
             if (validUsername === false)
             {
                 console.log('llega1');
-                res.writeHead(400, {
+                /*res.writeHead(400, {
                     'Content-Type': 'application/json',
-                });
+                });*/
                 res.end(JSON.stringify({success: false, error: 'Username already exists'}));
                 return;
             }
@@ -58,9 +66,9 @@ export async function registerUser(req, res) {
             if (validEmail === false)
             {
                 console.log('llega2');
-                res.writeHead(400, {
+                /*res.writeHead(400, {
                     'Content-Type': 'application/json',
-                });
+                });*/
                 res.end(JSON.stringify({success: false, error: 'Email already exists or is invalid'}));
                 return;
             }
