@@ -10,6 +10,7 @@ RUN npm install mariadb
 RUN npm install axios
 RUN npm install dotenv
 RUN npm install bcryptjs
+RUN npm install nodemailer
 
 EXPOSE 3000
 

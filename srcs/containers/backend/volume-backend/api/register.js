@@ -1,5 +1,6 @@
 import {db} from '../database.js';
 import bcrypt from 'bcryptjs';
+import {sendEmail} from './sendEmail.js';
 
 async function isValidEmail(email, conn) {
     try{
@@ -8,6 +9,8 @@ async function isValidEmail(email, conn) {
             console.log('Email regex validation failed for: ' + email);
             return false;
         }
+
+        sendEmail(email);
 
         const rows = await conn.query('SELECT COUNT(*) AS count FROM users WHERE email = ?', [email]);
         const result = Number(rows[0].count);  // Convert bigint to number
