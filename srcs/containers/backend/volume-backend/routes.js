@@ -1,8 +1,17 @@
-import { registerUser } from "./api/register.js";
+import { checkUserData, registerUser } from "./api/register.js";
+import { sendEmailApi } from "./api/sendEmail.js";
 
 export const routes = {
-  '/register-user': {
+  '/check-user-data': {
     METHOD: 'POST',
+    HANDLER: checkUserData
+  },
+  '/send-email': {
+    METHOD: 'POST',
+    HANDLER: sendEmailApi
+  },
+  '/register-user': {
+    METHOD: 'GET',
     HANDLER: registerUser
   }
 }

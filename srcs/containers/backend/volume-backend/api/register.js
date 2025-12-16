@@ -1,5 +1,6 @@
 import {db} from '../database.js';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import {sendEmail} from './sendEmail.js';
 
 async function isValidEmail(email, conn) {
@@ -10,8 +11,7 @@ async function isValidEmail(email, conn) {
             return false;
         }
 
-        sendEmail(email);
-
+        
         const rows = await conn.query('SELECT COUNT(*) AS count FROM users WHERE email = ?', [email]);
         const result = Number(rows[0].count);  // Convert bigint to number
         console.log('count email: ' + result + ', type: ' + typeof result);
@@ -40,7 +40,7 @@ async function isValidUsername(username, conn) {
     return false;
 }
 
-export async function registerUser(req, res) {
+export async function checkUserData(req, res) {
     let body = '';
     req.on("data", chunk => {
         body += chunk.toString();
@@ -75,7 +75,9 @@ export async function registerUser(req, res) {
                 res.end(JSON.stringify({success: false, error: 'Email already exists or is invalid'}));
                 return;
             }
-            const result = await conn.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, hashPassword]);
+            const token = crypto.randomUUID();
+            sendEmail(email, token);
+            const result = await conn.query('INSERT INTO pending_users (username, email, password, token) VALUES (?, ?, ?, ?)', [username, email, hashPassword, token]);
 
             conn.release();
             res.end(JSON.stringify({success: true}));
@@ -89,4 +91,37 @@ export async function registerUser(req, res) {
             return;
         }
     });
+}
+
+export async function registerUser(req, res) {
+    try {
+        console.log('registerUser called');
+        const conn = await db.getConnection();
+        const token = new URL(req.url, `http://${req.headers.host}`).searchParams.get('token');
+
+        const rows = await conn.query('SELECT * FROM pending_users WHERE token = ?', [token]);
+        if (rows.length === 0) {
+            res.writeHead(400, {
+                'Content-Type': 'application/json',
+            });
+            res.end(JSON.stringify({success: false, error: 'Invalid or expired token'}));
+            return;
+        }
+        const user = rows[0];
+        await conn.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [user.username, user.email, user.password]);
+        await conn.query('DELETE FROM pending_users WHERE token = ?', [token]);
+        conn.release();
+        // res.writeHead(302, {
+        //     Location: "http://localhost:8443/login?confirmed=true"
+        // });
+        res.end();
+    }
+    catch (error) {
+        res.writeHead(500, {
+            'Content-Type': 'application/json',
+        });
+        //console.error('Error registrating user: ', error.message);
+        res.end(JSON.stringify({success: false, error: error.message}));
+        return;
+    }
 }

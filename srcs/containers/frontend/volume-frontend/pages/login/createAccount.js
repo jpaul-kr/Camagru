@@ -1,6 +1,6 @@
 import { MyHtml } from "../../../myHtml.js";
 import { loginPage } from "./login.js";
-import { register } from "./register.js";
+import { checkData, sendConfirmationEmail } from "./register.js";
 
 function addImage(resultContainer, isOk) {
     const result = document.createElement('img');
@@ -45,7 +45,7 @@ async function registrationFormHandler(event) {
 
     // Here you would typically send the registration data to the server
     console.log("Registering user:", { username, email, password: password1 });
-    const data = await register(username, email, password1);
+    const data = await checkData(username, email, password1);
     if (data.success === false) {
         addImage(resultContainer, false);
         setTimeout(() => {
@@ -53,9 +53,10 @@ async function registrationFormHandler(event) {
         }, 50);
         return;
     }
-    addImage(resultContainer, true);
+    //addImage(resultContainer, true);
+    //sendConfirmationEmail(email);
     setTimeout(() => {
-        alert("Registration successful! You can now log in.");
+        alert("We have sent you a confirmation email. Please check your inbox to activate your account.");
     }, 50);
 }
 
