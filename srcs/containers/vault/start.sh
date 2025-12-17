@@ -21,6 +21,7 @@ vault policy write vault-policy /opt/vault/vault-policy.hcl
 vault secrets enable -path=Camagru kv
 vault token create -policy=vault-policy -orphan -id=$VAULT_TOKEN_ID
 
-vault kv put Camagru/email_pass email-pass=`$EMAIL_PASSWORD`
+vault kv put Camagru/email_pass email-pass="$EMAIL_PASSWORD"
+echo $EMAIL_PASSWORD
 
 wait $VAULT_PID

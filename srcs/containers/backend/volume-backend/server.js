@@ -24,8 +24,6 @@ const server = http.createServer((req, res) => {
     res.writeHead(204);
     return res.end();
   }
-  
-  
   routeHandler(req, res);
 });
 

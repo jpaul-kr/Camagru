@@ -5,27 +5,25 @@ import { getSecret } from '../getSecret.js';
 dotenv.config();
 
 
-export function sendEmail(email, token) {
+export async function sendEmail(email, token) {
     try {
         const htmlcontent = `<h1>Welcome to Camagru!</h1>
             <div>
                 <p>please confirm your email:</p>
             </div>
             <div>
-                <a href="http://localhost:3000/register-user?token=${token}">Confirm Email</a>
+                <a href="http://localhost:8443/backend/register-user?token=${token}">Confirm Email</a>
             </div>`;
-        const aux = email.split('@')[1];
-        const domain = aux.split('.')[0];
-        const pass = getSecret('email_pass', 'email-pass');
+        const pass = await getSecret('email_pass', 'email-pass').replace(/^"|"$/g, '');
         console.log(`vault email pass: ${pass}`);
         const transporter = nodemailer.createTransport({
             // host: 'jonpk555@gmail.com',
             // port: 587,
             // secure: false,
-            service: domain,
+            service: 'gmail',
             auth: {
                 user: process.env.EMAIL_DOMAIN,
-                pass: process.env.EMAIL_PASSWORD
+                pass: pass
             }
         });
         

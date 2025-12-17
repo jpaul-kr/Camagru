@@ -18,8 +18,9 @@ export const routes = {
 
 export function routeHandler(req, res) {
   const {url, method} = req;
-
-  const path = routes[url];
+  const urlPath = new URL(req.url, `http://${req.headers.host}`).pathname;
+  console.log(`Received ${method} request for ${urlPath}`);
+  const path = routes[urlPath];
 
   if (!path || path.METHOD !== method) {
     res.statusCode = 404;

@@ -76,6 +76,7 @@ export async function checkUserData(req, res) {
                 return;
             }
             const token = crypto.randomUUID();
+            console.log('token: ' + token);
             sendEmail(email, token);
             const result = await conn.query('INSERT INTO pending_users (username, email, password, token) VALUES (?, ?, ?, ?)', [username, email, hashPassword, token]);
 
@@ -111,9 +112,9 @@ export async function registerUser(req, res) {
         await conn.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [user.username, user.email, user.password]);
         await conn.query('DELETE FROM pending_users WHERE token = ?', [token]);
         conn.release();
-        // res.writeHead(302, {
-        //     Location: "http://localhost:8443/login?confirmed=true"
-        // });
+        res.writeHead(302, {
+            Location: "http://localhost:8443/login?confirmed=true"
+        });
         res.end();
     }
     catch (error) {
