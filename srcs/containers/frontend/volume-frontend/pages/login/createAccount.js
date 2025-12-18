@@ -1,6 +1,6 @@
 import { MyHtml } from "../../../myHtml.js";
 import { loginPage } from "./login.js";
-import { checkData, sendConfirmationEmail } from "./register.js";
+import { checkData } from "./register.js";
 
 function addImage(resultContainer, isOk) {
     const result = document.createElement('img');
@@ -46,6 +46,7 @@ async function registrationFormHandler(event) {
     // Here you would typically send the registration data to the server
     console.log("Registering user:", { username, email, password: password1 });
     const data = await checkData(username, email, password1);
+    
     if (data.success === false) {
         addImage(resultContainer, false);
         setTimeout(() => {
@@ -53,11 +54,20 @@ async function registrationFormHandler(event) {
         }, 50);
         return;
     }
-    //addImage(resultContainer, true);
-    //sendConfirmationEmail(email);
     setTimeout(() => {
         alert("We have sent you a confirmation email. Please check your inbox to activate your account.");
     }, 50);
+
+    const confirmed = new URLSearchParams(window.location.search).get('confirmed');
+    if (confirmed && confirmed === 'true') {
+        console.log("email confirmed");
+        if (resultContainer) {
+            addImage(resultContainer, true);
+            setTimeout(() => {
+                alert("Registration successful! You can now log in.");
+            }, 50);
+        }
+    }
 }
 
 function createRegisterForm(formContainer) {
@@ -138,7 +148,7 @@ export function createAccountPage() {
     loginContainer.remove();
 
     const main = document.getElementById("main-section");
-    if (!main)
+    if (main == null)
         return;
 
     const registerContainer = MyHtml.createElement('div', 'login');
@@ -153,6 +163,7 @@ export function createAccountPage() {
     formContainer.style.height = "80%";
 
     //const registerForm = createRegisterForm(formContainer);
-    createRegisterForm(formContainer);
     main.appendChild(registerContainer);
+    createRegisterForm(formContainer);
+    return registerContainer;
 }

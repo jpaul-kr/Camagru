@@ -12,7 +12,7 @@ export async function getSecret(apiUrl, key) {
             }
         });
         const data = res.data;
-        return JSON.stringify(data.data[key]);
+        return data.data[key];
     }
     catch (error) {
         console.error('Error fetching secret: ', error.message);

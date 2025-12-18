@@ -113,7 +113,7 @@ export async function registerUser(req, res) {
         await conn.query('DELETE FROM pending_users WHERE token = ?', [token]);
         conn.release();
         res.writeHead(302, {
-            Location: "http://localhost:8443/login?confirmed=true"
+            Location: "http://localhost:8443?confirmed=true"
         });
         res.end();
     }

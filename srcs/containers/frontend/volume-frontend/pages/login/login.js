@@ -1,5 +1,6 @@
 import { MyHtml } from "../../../myHtml.js";
-import { createAccountPage } from "./createAccount.js";
+import { gotoRegister } from "../../pageRenderer.js";
+//import { createAccountPage } from "./createAccount.js";
 
 function forgotPasswordCall(){
     console.log("Forgot Password clicked");
@@ -36,7 +37,7 @@ function createLoginForm(formContainer) {
     const createAccountButton = MyHtml.createSubElement(createAccountDiv, 'button', 'button login-createaccount-button', 1, "hor");
     createAccountButton.type = "button";
     createAccountButton.textContent = "Create Account";
-    createAccountButton.addEventListener('click', createAccountPage);
+    createAccountButton.addEventListener('click', gotoRegister);
 
     return loginForm;
 }

@@ -1,6 +1,7 @@
 
 //import dotenv from 'dotenv';
-import { loginPage } from './volume-frontend/pages/login/login.js';
+import { gotoLogin } from './volume-frontend/pageRenderer.js';
+//import { loginPage } from './volume-frontend/pages/login/login.js';
 
 const apiUrl = 'http://localhost:3000';
 
@@ -41,7 +42,7 @@ function createMain() {
     const main = document.createElement('div');
     main.classList.add('main');
     main.id = "main-section";
-    const loginContainer = loginPage(main);
+    gotoLogin();
     //main.appendChild(loginContainer);
     document.body.appendChild(main);
     return main;

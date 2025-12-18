@@ -14,12 +14,9 @@ export async function sendEmail(email, token) {
             <div>
                 <a href="http://localhost:8443/backend/register-user?token=${token}">Confirm Email</a>
             </div>`;
-        const pass = await getSecret('email_pass', 'email-pass').replace(/^"|"$/g, '');
-        console.log(`vault email pass: ${pass}`);
+        const pass = await getSecret('email_pass', 'email-pass');
+        console.log('vault email pass: ' + pass);
         const transporter = nodemailer.createTransport({
-            // host: 'jonpk555@gmail.com',
-            // port: 587,
-            // secure: false,
             service: 'gmail',
             auth: {
                 user: process.env.EMAIL_DOMAIN,
