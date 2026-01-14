@@ -58,7 +58,7 @@ async function registrationFormHandler(event) {
         alert("We have sent you a confirmation email. Please check your inbox to activate your account.");
     }, 50);
 
-    const confirmed = new URLSearchParams(window.location.search).get('confirmed');
+    const confirmed = new URLSearchParams(window.location.search).get('confirmed'); // no espera a que el email haya sido confirmado
     if (confirmed && confirmed === 'true') {
         console.log("email confirmed");
         if (resultContainer) {
@@ -68,6 +68,7 @@ async function registrationFormHandler(event) {
             }, 50);
         }
     }
+    console.log("pasa de largo");
 }
 
 function createRegisterForm(formContainer) {
@@ -140,17 +141,18 @@ function createRegisterForm(formContainer) {
     return registerForm;
 }
 
-export function createAccountPage() {
+export function createAccountPage(main) {
     console.log("Create Account clicked");
-    const loginContainer = document.getElementById("login-container");
-    if (loginContainer == null)
-        return;
-    loginContainer.remove();
+    // const loginContainer = document.getElementById("login-container");
+    // if (loginContainer == null)
+    //     return;
+    // loginContainer.remove();
 
-    const main = document.getElementById("main-section");
-    if (main == null)
-        return;
+    // const main = document.getElementById("main-section");
+    // if (main == null)
+    //     return;
 
+    console.log("llega " + main);
     const registerContainer = MyHtml.createElement('div', 'login');
     registerContainer.id = "register-container";
     registerContainer.style.flexDirection = "column";

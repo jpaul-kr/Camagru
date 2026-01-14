@@ -115,7 +115,7 @@ export async function registerUser(req, res) {
         res.writeHead(302, {
             Location: "http://localhost:8443?confirmed=true"
         });
-        res.end();
+        res.end(JSON.stringify({success: true}));
     }
     catch (error) {
         res.writeHead(500, {

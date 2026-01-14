@@ -15,11 +15,12 @@ export function gotoRegister() {
 export function pageRenderer(main) {
     const pathname = window.location.pathname;
 
-    console.log("Rendering page for path: ", pathname);
+    console.log("Rendering page for path: " + pathname + " main " + main);
+    main.innerHTML = "";
     if (pathname == '/login')
         return loginPage(main);
     else if (pathname == '/register')
-        return createAccountPage();
+        return createAccountPage(main);
     else
         return loginPage(main);
 }   

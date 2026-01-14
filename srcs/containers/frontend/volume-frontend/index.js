@@ -42,9 +42,9 @@ function createMain() {
     const main = document.createElement('div');
     main.classList.add('main');
     main.id = "main-section";
+    document.body.appendChild(main);
     gotoLogin();
     //main.appendChild(loginContainer);
-    document.body.appendChild(main);
     return main;
 }
 
