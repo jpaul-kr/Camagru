@@ -1,19 +1,14 @@
 import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
 import { getSecret } from '../getSecret.js';
+import crypto from 'crypto';
+import {db, addToPendingUsers} from '../database.js';
 
 dotenv.config();
 
 
-export async function sendEmail(email, token) {
+export async function sendEmail(email, htmlcontent) {
     try {
-        const htmlcontent = `<h1>Welcome to Camagru!</h1>
-            <div>
-                <p>please confirm your email:</p>
-            </div>
-            <div>
-                <a href="http://localhost:8443/backend/register-user?token=${token}">Confirm Email</a>
-            </div>`;
         const pass = await getSecret('email_pass', 'email-pass');
         console.log('vault email pass: ' + pass);
         const transporter = nodemailer.createTransport({
@@ -44,16 +39,25 @@ export async function sendEmail(email, token) {
     }
 }
 
-export async function sendEmailApi(req, res) {
+export async function sendConfirmationEmail(req, res) {
     let body = '';
     req.on("data", chunk => {
         body += chunk.toString();
     });
     req.on("end", async () => {
         req.body = JSON.parse(body);
-        const {email} = req.body;
+        const {email, username, password} = req.body;
         try {
-            sendEmail(email);
+            const token = crypto.randomUUID();
+            const htmlcontent = `<h1>Welcome to Camagru!</h1>
+                <div>
+                    <p>please confirm your email:</p>
+                </div>
+                <div>
+                    <a href="http://localhost:8443/backend/register-user?token=${token}">Confirm Email</a>
+                </div>`;
+            addToPendingUsers(username, email, password, token);
+            sendEmail(email, htmlcontent);
             res.writeHead(200, {'Content-Type': 'application/json'});
             res.end(JSON.stringify({success: true}));
         }
@@ -61,6 +65,33 @@ export async function sendEmailApi(req, res) {
             console.error('Error sending confirmation email: ', error.message);
             res.writeHead(500, {'Content-Type': 'application/json'});
             res.end(JSON.stringify({success: false, error: 'Internal server error'}));
+        }
+    });
+}
+
+export async function sendForgotPasswordEmail(req, res) {
+    let body = '';
+    req.on('data', chunk => {
+        body += chunk.toString();
+    });
+
+    req.on('end', async () => {
+        req.body = JSON.parse(body);
+        const {email} = req.body;
+        try{
+            const htmlcontent = `<h1>Camagru assistance</h1>
+                <div>
+                    <p>Click the link bellow to change your password:</p>
+                </div>
+                <div>
+                    <a href="http://localhost:8443/backend/register-user?token=">Change password</a>
+                </div>`;
+            sendEmail(email, htmlcontent);
+            res.end(JSON.stringify({success: true}));
+        }
+        catch(error) {
+            console.log('error sending link to reset password');
+            res.end(JSON.stringify({success: false}));
         }
     });
 }

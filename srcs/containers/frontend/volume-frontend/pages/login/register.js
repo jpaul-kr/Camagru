@@ -15,14 +15,14 @@ export async function checkData(username, email, password) {
     }
 }
 
-export async function sendConfirmationEmail(email) {
+export async function sendConfirmationEmail(username, email, password) {
     try {
-        const response = await fetch(`http://localhost:8443/backend/send-email`, {
+        const response = await fetch(`http://localhost:8443/backend/send-confirmation-email`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({email}),
+            body: JSON.stringify({username, email, password}),
         });
         const data = await response.json();
         return data;

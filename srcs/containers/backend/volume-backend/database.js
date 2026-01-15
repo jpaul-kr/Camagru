@@ -1,5 +1,6 @@
 import mariadb from 'mariadb';
 import dotenv from 'dotenv';
+import bcrypt from 'bcryptjs';
 
 dotenv.config();
 
@@ -11,8 +12,20 @@ export const db = mariadb.createPool({
     connectionLimit: 5
 });
 
-async function initDb() {
+export async function addToPendingUsers(username, email, password, token) {
     try {
+        const conn = await db.getConnection();
+        const hashPassword = await bcrypt.hash(password, 12);
+        await conn.query(`INSERT INTO pending_users (username, email, password, token) VALUES (?, ?, ?, ?)`, [username, email, hashPassword, token]);
+        conn.release();
+    }
+    catch(error) {
+        console.log('error trying to add to pending_users: ', error.message)
+    }
+}
+
+async function initDb() {
+    try { 
         const conn = await db.getConnection();
 
         await conn.query("USE camagru");

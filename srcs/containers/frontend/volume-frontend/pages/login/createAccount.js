@@ -1,6 +1,6 @@
 import { MyHtml } from "../../../myHtml.js";
 import { loginPage } from "./login.js";
-import { checkData } from "./register.js";
+import { checkData, sendConfirmationEmail } from "./register.js";
 
 function addImage(resultContainer, isOk) {
     const result = document.createElement('img');
@@ -46,7 +46,6 @@ async function registrationFormHandler(event) {
     // Here you would typically send the registration data to the server
     console.log("Registering user:", { username, email, password: password1 });
     const data = await checkData(username, email, password1);
-    
     if (data.success === false) {
         addImage(resultContainer, false);
         setTimeout(() => {
@@ -54,21 +53,20 @@ async function registrationFormHandler(event) {
         }, 50);
         return;
     }
-    setTimeout(() => {
-        alert("We have sent you a confirmation email. Please check your inbox to activate your account.");
-    }, 50);
-
-    const confirmed = new URLSearchParams(window.location.search).get('confirmed'); // no espera a que el email haya sido confirmado
-    if (confirmed && confirmed === 'true') {
-        console.log("email confirmed");
-        if (resultContainer) {
-            addImage(resultContainer, true);
-            setTimeout(() => {
-                alert("Registration successful! You can now log in.");
-            }, 50);
-        }
+    const emailData = await sendConfirmationEmail(username, email, password1);
+    if (emailData.success) {
+        addImage(resultContainer, true);
+        setTimeout(() => {
+            alert("We have sent you a confirmation email. Please check your inbox to activate your account.");
+        }, 50);
     }
-    console.log("pasa de largo");
+    else
+    {
+        addImage(resultContainer, false);
+        setTimeout(() => {
+            alert("There has been an error trying to send you the confimtion email.");
+        }, 50);
+    }
 }
 
 function createRegisterForm(formContainer) {

@@ -1,14 +1,14 @@
 import { checkUserData, registerUser } from "./api/register.js";
-import { sendEmailApi } from "./api/sendEmail.js";
+import { sendConfirmationEmail } from "./api/sendEmail.js";
 
 export const routes = {
   '/check-user-data': {
     METHOD: 'POST',
     HANDLER: checkUserData
   },
-  '/send-email': {
+  '/send-confirmation-email': {
     METHOD: 'POST',
-    HANDLER: sendEmailApi
+    HANDLER: sendConfirmationEmail
   },
   '/register-user': {
     METHOD: 'GET',

@@ -1,7 +1,7 @@
 import {db} from '../database.js';
 import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
-import {sendEmail} from './sendEmail.js';
+// import crypto from 'crypto';
+// import {sendEmail} from './sendEmail.js';
 
 async function isValidEmail(email, conn) {
     try{
@@ -57,10 +57,6 @@ export async function checkUserData(req, res) {
             console.log('validUsername: ' + validUsername);
             if (validUsername === false)
             {
-                console.log('llega1');
-                /*res.writeHead(400, {
-                    'Content-Type': 'application/json',
-                });*/
                 res.end(JSON.stringify({success: false, error: 'Username already exists'}));
                 return;
             }
@@ -75,11 +71,6 @@ export async function checkUserData(req, res) {
                 res.end(JSON.stringify({success: false, error: 'Email already exists or is invalid'}));
                 return;
             }
-            const token = crypto.randomUUID();
-            console.log('token: ' + token);
-            sendEmail(email, token);
-            const result = await conn.query('INSERT INTO pending_users (username, email, password, token) VALUES (?, ?, ?, ?)', [username, email, hashPassword, token]);
-
             conn.release();
             res.end(JSON.stringify({success: true}));
         }
