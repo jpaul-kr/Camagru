@@ -24,6 +24,32 @@ export async function addToPendingUsers(username, email, password, token) {
     }
 }
 
+export async function changeUserPassword(email, password) {
+    try {
+        const conn = await db.getConnection();
+        const rows = await conn.query(`SELECT * from users WHERE email = ?`, [email]);
+        if (rows.length === 0) {
+            conn.release();
+            res.writeHead(404);
+            return res.end(JSON.stringify({success: false, message: 'User not found'}));
+        }
+
+        const oldPassword = rows[0].password;
+        const match = await bcrypt.compare(oldPassword, password);
+        if (!match) {
+            conn.release();
+            res.writeHead(401);
+            return res.end(JSON.stringify({success: false, message: 'Invalid password'}));
+        }
+        await conn.query(`UPDATE users SET password = ? WHERE email = ?`, [password, email]);
+        conn.release();
+        res.end(JSON.stringify({success: true}));
+    }
+    catch (error) {
+        console.log("error trying to change paassword: " + error.message);
+    }
+}
+
 async function initDb() {
     try { 
         const conn = await db.getConnection();

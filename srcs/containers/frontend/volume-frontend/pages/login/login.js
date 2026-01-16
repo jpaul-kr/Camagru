@@ -1,10 +1,9 @@
 import { MyHtml } from "../../../myHtml.js";
 import { gotoRegister } from "../../pageRenderer.js";
+import { forgotPasswordCall } from "./forgotPassword.js";
 //import { createAccountPage } from "./createAccount.js";
 
-function forgotPasswordCall(){
-    console.log("Forgot Password clicked");
-}
+
 
 function createLoginForm(formContainer) {
     const loginForm = MyHtml.createSubElement(formContainer, 'form', 'login-form', 1, "hor");
