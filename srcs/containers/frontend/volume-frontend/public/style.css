@@ -195,6 +195,19 @@
     transform: scale(0.9);
 }
 
+.send-forgot-password-button {
+    background-color: #3CF03C;
+    color: white;
+    border: none;
+    width: 100%;
+    height: 85%;
+    font-size: 24px;
+    font-weight: 750;
+    margin-bottom: 10px;
+    line-height: 58px;
+    border-radius: 6px;
+}
+
 .overlay-popup {
     position: fixed;
     top: 0;
@@ -215,5 +228,22 @@
     padding: 25px;
     border-radius: 10px;
     text-align: center;
-    min-width: 300px;    
+    min-width: 500px;
+    height: 196px;   
+}
+
+.send-forgot-pass-success {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    color: #36F740;
+}
+
+.send-forgot-pass-fail {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    color: #F75736;
 }

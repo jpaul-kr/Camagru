@@ -25,4 +25,17 @@ export class MyHtml {
         parent.appendChild(element);
         return element;
     }
+
+    static createSubElement2(parent, type, styles, percentageRow, percentageColumn) {
+        const element = document.createElement(type);
+        if (styles)
+        {
+            for (const style of styles.split(" "))
+                element.classList.add(style);
+        }
+        element.style.width = percentageRow;
+        element.style.height = percentageColumn;
+        parent.appendChild(element);
+        return element;
+    }
 }

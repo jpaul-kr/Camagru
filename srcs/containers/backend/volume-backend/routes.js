@@ -1,5 +1,6 @@
 import { checkUserData, registerUser } from "./api/register.js";
 import { sendConfirmationEmail } from "./api/sendEmail.js";
+import { checkEmail } from "./api/chackData.js";
 
 export const routes = {
   '/check-user-data': {
@@ -13,6 +14,10 @@ export const routes = {
   '/register-user': {
     METHOD: 'GET',
     HANDLER: registerUser
+  },
+  '/check-email-exists': {
+    METHOD: 'POST',
+    HANDLER: checkEmail
   }
 }
 

@@ -1,6 +1,7 @@
 import mariadb from 'mariadb';
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
+import { checkData } from '../../frontend/volume-frontend/pages/login/register';
 
 dotenv.config();
 
@@ -11,6 +12,14 @@ export const db = mariadb.createPool({
     database: 'camagru',
     connectionLimit: 5
 });
+
+export async function checkDbData(key, value) {
+    const conn = await db.getConnection();
+
+    const rows = await conn.query('SELECT COUNT(*) AS count FROM users WHERE ? = ?', [key], [value]);
+    const result = Number(rows[0].count);  // Convert bigint to number
+    return (result == 0 ? false : true);
+}
 
 export async function addToPendingUsers(username, email, password, token) {
     try {
