@@ -22,6 +22,7 @@ RUN mv coreruleset owasp-crs
 RUN mv owasp-crs/rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf.example owasp-crs/rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf
 RUN rm owasp-crs/crs-setup.conf.example
 RUN mv owasp-crs/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf.example owasp-crs/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf
+COPY conf/owasp-crs/REQUEST-920-PROTOCOL-ENFORCEMENT.conf owasp-crs/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf
 
 WORKDIR /opt/ModSecurity
 RUN git submodule init && git submodule update

@@ -1,10 +1,9 @@
 import { MyHtml } from "../../../myHtml.js";
-import dotenv from 'dotenv';
 
-async function sendEmail(overlay, inputText) {
+async function sendEmail(inputText) {
     console.log("entra en sendEmail");
 
-    const res = await fetch(`${process.env.SERVER_ADDR}/backend/check-email-exists`, {
+    const res = await fetch(`http://localhost:8443/backend/check-email-exists`, {
         method: 'POST',
         headers: {
             'Content-type': 'applicatin/json',
@@ -12,8 +11,19 @@ async function sendEmail(overlay, inputText) {
         body: JSON.stringify({email: inputText})
     });
     const data = res.json();
-    if (data.success)
-        overlay.remove();
+
+    if (data.success) {
+        res = await fetch(`http://localhost:8443/backend/send-forgot-password-email`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'applicatin/json',
+            },
+            body: JSON.stringify({email: inputText})
+        });
+        const data2 = res.json();
+        if (!data2.success)
+            return false;
+    }
     return data.success;
 }
 
@@ -45,14 +55,17 @@ async function createEmailPopup() {
     sendButton.textContent = "send";
     //sendButton.margin-bottom = 0;
     // sendButton.margin-right = 'px';
-    let resultP;
+    let resultP = null;
     sendButton.addEventListener('click', () => {
-        const result = sendEmail(overlay, input.value);
+        const result = sendEmail(input.value);
         
-        resultP.remove();
-        if (!result) {
+        if (!result && !resultP) {
             resultP = MyHtml.createSubElement2(resultDiv, 'p', 'send-forgot-pass-fail', '100%', '100%');
             resultP.textContent = 'No email Found';
+        }
+        else {
+            resultP = MyHtml.createSubElement2(resultDiv, 'p', 'send-forgot-pass-success', '100%', '100%');
+            resultP.textContent = 'Email has been sent!';
         }
     });
 
@@ -67,4 +80,15 @@ export async function forgotPasswordCall() {
     if (!main)
         return ;
     const popup = createEmailPopup();
+}
+
+export async function changePasswordPage(main) {
+    let token = new URLSearchParams(window.location.search).get('token');
+
+    if (!token)
+        showError("Invalid token for reset password");
+
+    const p = document.createElement('p');
+    p.innerText = 'dudu dududud dudud ';
+    main.appendChild(p);
 }

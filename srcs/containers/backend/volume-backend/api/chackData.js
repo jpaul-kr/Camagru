@@ -10,7 +10,7 @@ export async function checkEmail(res, req) {
         const {email} = req.body;
 
         try {
-            const result = checkDbData('email', email);
+            const result = checkDbData('users' ,'email', email);
             res.end(JSON.stringify({success: result}));
         }
         catch (error) {

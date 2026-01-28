@@ -1,7 +1,8 @@
 import mariadb from 'mariadb';
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
-import { checkData } from '../../frontend/volume-frontend/pages/login/register';
+import { error } from 'console';
+//import { checkData } from '../../frontend/volume-frontend/pages/login/register';
 
 dotenv.config();
 
@@ -13,10 +14,10 @@ export const db = mariadb.createPool({
     connectionLimit: 5
 });
 
-export async function checkDbData(key, value) {
+export async function checkDbData(table, key, value) {
     const conn = await db.getConnection();
 
-    const rows = await conn.query('SELECT COUNT(*) AS count FROM users WHERE ? = ?', [key], [value]);
+    const rows = await conn.query('SELECT COUNT(*) AS count FROM ? WHERE ? = ?', [table], [key], [value]);
     const result = Number(rows[0].count);  // Convert bigint to number
     return (result == 0 ? false : true);
 }
@@ -30,6 +31,16 @@ export async function addToPendingUsers(username, email, password, token) {
     }
     catch(error) {
         console.log('error trying to add to pending_users: ', error.message)
+    }
+}
+
+export async function addToChangePassword(email, token) {
+    try {
+        const conn = await db.getConnection();
+        await conn.query(`INSERT INTO change_password (email, token) VALUES (?, ?)`, [email, token]);
+    } 
+    catch(error) {
+        console.log('error adding email or token to change password: ', error.message)
     }
 }
 
@@ -55,7 +66,7 @@ export async function changeUserPassword(email, password) {
         res.end(JSON.stringify({success: true}));
     }
     catch (error) {
-        console.log("error trying to change paassword: " + error.message);
+        console.log("error trying to change password: " + error.message);
     }
 }
 
@@ -82,6 +93,14 @@ async function initDb() {
                 username VARCHAR(50) NOT NULL UNIQUE,
                 email VARCHAR(100) NOT NULL UNIQUE,
                 password VARCHAR(255) NOT NULL,
+                token VARCHAR(255) NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );`);
+
+        await conn.query(`
+            CREATE TABLE IF NOT EXISTS change_password (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                email VARCHAR(100) NOT NULL UNIQUE,
                 token VARCHAR(255) NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );`);

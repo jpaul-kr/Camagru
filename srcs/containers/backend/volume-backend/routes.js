@@ -1,5 +1,5 @@
 import { checkUserData, registerUser } from "./api/register.js";
-import { sendConfirmationEmail } from "./api/sendEmail.js";
+import { sendConfirmationEmail, sendForgotPasswordEmail } from "./api/sendEmail.js";
 import { checkEmail } from "./api/chackData.js";
 
 export const routes = {
@@ -10,6 +10,10 @@ export const routes = {
   '/send-confirmation-email': {
     METHOD: 'POST',
     HANDLER: sendConfirmationEmail
+  },
+  '/send-forgot-password-email': {
+    METHOD: 'POST',
+    HANDLER: sendForgotPasswordEmail
   },
   '/register-user': {
     METHOD: 'GET',

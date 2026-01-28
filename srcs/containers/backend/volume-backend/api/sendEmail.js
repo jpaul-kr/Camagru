@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
 import { getSecret } from '../getSecret.js';
 import crypto from 'crypto';
-import {db, addToPendingUsers} from '../database.js';
+import {db, addToPendingUsers, addToChangePassword} from '../database.js';
 
 dotenv.config();
 
@@ -79,13 +79,15 @@ export async function sendForgotPasswordEmail(req, res) {
         req.body = JSON.parse(body);
         const {email} = req.body;
         try{
+            const token = crypto.randomUUID();
             const htmlcontent = `<h1>Camagru assistance</h1>
                 <div>
                     <p>Click the link bellow to change your password:</p>
                 </div>
                 <div>
-                    <a href="http://localhost:8443/backend/register-user?token=">Change password</a>
+                    <a href="http://localhost:8443/backend/reset-password?token=${token}">Change password</a>
                 </div>`;
+            addToChangePassword(email, token);
             sendEmail(email, htmlcontent);
             res.end(JSON.stringify({success: true}));
         }
