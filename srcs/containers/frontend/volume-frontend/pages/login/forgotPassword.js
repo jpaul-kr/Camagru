@@ -6,25 +6,26 @@ async function sendEmail(inputText) {
     const res = await fetch(`http://localhost:8443/backend/check-email-exists`, {
         method: 'POST',
         headers: {
-            'Content-type': 'applicatin/json',
+            'Content-Type': 'applicatin/json',
         },
         body: JSON.stringify({email: inputText})
     });
-    const data = res.json();
-
-    if (data.success) {
-        res = await fetch(`http://localhost:8443/backend/send-forgot-password-email`, {
+    const data = await res.json();
+    console.log('acaba check-email-exists resultado: ' + data.result);
+    if (data.result) {
+        const res2 = await fetch(`http://localhost:8443/backend/send-forgot-password-email`, {
             method: 'POST',
             headers: {
                 'Content-type': 'applicatin/json',
             },
             body: JSON.stringify({email: inputText})
         });
-        const data2 = res.json();
-        if (!data2.success)
+        const data2 = await res2.json();
+        if (data2.success === false)
             return false;
+        console.log('acaba send-forgot-password resultado: ' + data2.success);
     }
-    return data.success;
+    return data.result;
 }
 
 async function createEmailPopup() {
@@ -32,7 +33,7 @@ async function createEmailPopup() {
     overlay.className = 'overlay-popup';
 
     const popup = document.createElement('div');
-    popup.className = 'popup'; 
+    popup.className = 'popup';
 
     const pdiv = MyHtml.createSubElement2(popup, 'div', 'div-row', '100%', '45%');
     const sendDiv = MyHtml.createSubElement2(popup, 'div', 'div-row', '100%', '45%');
@@ -56,10 +57,14 @@ async function createEmailPopup() {
     //sendButton.margin-bottom = 0;
     // sendButton.margin-right = 'px';
     let resultP = null;
-    sendButton.addEventListener('click', () => {
-        const result = sendEmail(input.value);
+    sendButton.addEventListener('click', async () => {
+        const result = await sendEmail(input.value);
         
-        if (!result && !resultP) {
+        console.log('result for sendButton: ' + result);
+        if (resultP != null || resultP != undefined)
+            resultP.remove();
+        console.log()
+        if (!result) {
             resultP = MyHtml.createSubElement2(resultDiv, 'p', 'send-forgot-pass-fail', '100%', '100%');
             resultP.textContent = 'No email Found';
         }

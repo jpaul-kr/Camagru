@@ -15,11 +15,18 @@ export const db = mariadb.createPool({
 });
 
 export async function checkDbData(table, key, value) {
-    const conn = await db.getConnection();
+    try {
+        const conn = await db.getConnection();
 
-    const rows = await conn.query('SELECT COUNT(*) AS count FROM ? WHERE ? = ?', [table], [key], [value]);
-    const result = Number(rows[0].count);  // Convert bigint to number
-    return (result == 0 ? false : true);
+        const rows = await conn.query(`SELECT COUNT(*) AS count FROM ${table} WHERE ${key} = ?`, [value]);
+        conn.release();
+        const result = Number(rows[0].count);  // Convert bigint to number
+        console.log('result: ' + result);
+        return (result == 0 ? false : true);
+    }
+    catch(error) {
+        console.log(`error trying to find ${value} in ${table}: ${error.message}`);
+    }
 }
 
 export async function addToPendingUsers(username, email, password, token) {
