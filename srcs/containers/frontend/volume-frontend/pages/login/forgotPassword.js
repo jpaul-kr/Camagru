@@ -87,13 +87,35 @@ export async function forgotPasswordCall() {
     const popup = createEmailPopup();
 }
 
+async function changePasswordCall(input1, input2) {
+    console.log('changePassword called ' + input1 + ' ' + input2);
+}
+
 export async function changePasswordPage(main) {
     let token = new URLSearchParams(window.location.search).get('token');
 
     if (!token)
-        showError("Invalid token for reset password");
+        console.log("Invalid token for reset password");
 
-    const p = document.createElement('p');
-    p.innerText = 'dudu dududud dudud ';
-    main.appendChild(p);
+    const formDiv = MyHtml.createSubElement2(main, 'div', 'div-column', '100%', '100%');
+    const form = MyHtml.createSubElement2(formDiv, 'form', 'change-password-form', null, null);
+    const input1Div = MyHtml.createSubElement2(form, 'div', 'div-column', '100%', '30%');
+    const input2Div = MyHtml.createSubElement2(form, 'div', 'div-column', '100%', '30%');
+    const lineDiv = MyHtml.createSubElement2(form, 'div', 'div-column', '100%', '10%');
+    const changePasswordButtonDiv = MyHtml.createSubElement2(form, 'div', 'div-column', '100%', '30%');
+
+    const input1 = MyHtml.createSubElement2(input1Div, 'input', 'login-input', '80%', null);
+    input1.placeholder = 'New Password';
+
+    const input2 = MyHtml.createSubElement2(input2Div, 'input', 'login-input', '80%', null);
+    input2.placeholder = 'Confirm New Password';
+
+    lineDiv.style.borderBottom = "2px solid #B0B0B0";
+    lineDiv.style.width = "80%";
+
+    const changePasswordButton = MyHtml.createSubElement2(changePasswordButtonDiv, 'button', 'button login-button', '60%', null);
+    changePasswordButton.textContent = 'Change Password';
+    changePasswordButton.addEventListener('click', () => {
+        changePasswordCall(input1.value, input2.value);
+    });
 }

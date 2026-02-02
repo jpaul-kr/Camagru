@@ -33,8 +33,10 @@ export class MyHtml {
             for (const style of styles.split(" "))
                 element.classList.add(style);
         }
-        element.style.width = percentageRow;
-        element.style.height = percentageColumn;
+        if (percentageRow)
+            element.style.width = percentageRow;
+        if (percentageColumn)
+            element.style.height = percentageColumn;
         parent.appendChild(element);
         return element;
     }

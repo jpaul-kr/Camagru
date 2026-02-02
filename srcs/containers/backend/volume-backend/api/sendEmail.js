@@ -85,7 +85,7 @@ export async function sendForgotPasswordEmail(req, res) {
                     <p>Click the link bellow to change your password:</p>
                 </div>
                 <div>
-                    <a href="http://localhost:8443/backend/reset-password?token=${token}">Change password</a>
+                    <a href="http://localhost:8443/reset-password?token=${token}">Change password</a>
                 </div>`;
             addToChangePassword(email, token);
             sendEmail(email, htmlcontent);

@@ -13,7 +13,7 @@ export function gotoRegister() {
     pageRenderer(document.getElementById("main-section"));
 }
 
-export function gotoresetPassword()  {
+export function gotoResetPassword()  {
     history.pushState({}, '', '/reset-password');
     pageRenderer(document.getElementById("main-section"));
 }
@@ -23,11 +23,11 @@ export function pageRenderer(main) {
 
     console.log("Rendering page for path: " + pathname + " main " + main);
     main.innerHTML = "";
-    if (pathname == '/login')
+    if (pathname === '/login')
         return loginPage(main);
-    else if (pathname == '/register')
+    else if (pathname === '/register')
         return createAccountPage(main);
-    else if (pathname == 'reset-password')
+    else if (pathname === '/reset-password')
         return changePasswordPage(main);
     else
         return loginPage(main);
