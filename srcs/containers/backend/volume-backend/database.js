@@ -33,6 +33,7 @@ export async function addToPendingUsers(username, email, password, token) {
     try {
         const conn = await db.getConnection();
         const hashPassword = await bcrypt.hash(password, 12);
+        //const hashPassword = password;
         await conn.query(`INSERT INTO pending_users (username, email, password, token) VALUES (?, ?, ?, ?)`, [username, email, hashPassword, token]);
         conn.release();
     }
@@ -53,27 +54,32 @@ export async function addToChangePassword(email, token) {
 
 export async function changeUserPassword(email, password) {
     try {
+        console.log('entra a changeUserPassword');
         const conn = await db.getConnection();
         const rows = await conn.query(`SELECT * from users WHERE email = ?`, [email]);
         if (rows.length === 0) {
             conn.release();
-            res.writeHead(404);
-            return res.end(JSON.stringify({success: false, message: 'User not found'}));
+            return {success: false, message: 'Could not find email'};
         }
-
+        console.log('llega1');
         const oldPassword = rows[0].password;
         const match = await bcrypt.compare(oldPassword, password);
-        if (!match) {
+        console.log('match: ' + match);
+        if (match) {
             conn.release();
-            res.writeHead(401);
-            return res.end(JSON.stringify({success: false, message: 'Invalid password'}));
+            return {success: false, message: 'The password is the same as before'};
         }
+        console.log('llega2');
         await conn.query(`UPDATE users SET password = ? WHERE email = ?`, [password, email]);
+        console.log('llega3');
+        await conn.query(`DELETE FROM change_password WHERE email = ?`, [email]);
+        console.log('llega4');
         conn.release();
-        res.end(JSON.stringify({success: true}));
+        return {success: true, message: 'Success!! You can now go back to login'};
     }
     catch (error) {
         console.log("error trying to change password: " + error.message);
+        return {message: 'there has been an error trying to change your password :('}
     }
 }
 

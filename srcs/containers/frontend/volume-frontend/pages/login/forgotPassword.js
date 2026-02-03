@@ -87,8 +87,21 @@ export async function forgotPasswordCall() {
     const popup = createEmailPopup();
 }
 
-async function changePasswordCall(input1, input2) {
-    console.log('changePassword called ' + input1 + ' ' + input2);
+async function changePasswordCall(input, token) {
+    console.log('changePassword called ' + input);
+
+    const res = await fetch('http://localhost:8443/backend/reset-password', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({newPassword: input, token: token})
+    });
+
+    const data = await res.json();
+
+    alert(data.message);
+    return data.success;
 }
 
 export async function changePasswordPage(main) {
@@ -115,7 +128,19 @@ export async function changePasswordPage(main) {
 
     const changePasswordButton = MyHtml.createSubElement2(changePasswordButtonDiv, 'button', 'button login-button', '60%', null);
     changePasswordButton.textContent = 'Change Password';
+    changePasswordButton.type = 'button';
+    let isAlreadyOk = false;
     changePasswordButton.addEventListener('click', () => {
-        changePasswordCall(input1.value, input2.value);
+        if (input1.value != input2.value) {
+            setTimeout(() => {
+                alert("Passwords do not match.");
+            }, 50);
+            return ;
+        }
+        console.log('isAlreadyOk: ' + isAlreadyOk);
+        if (!isAlreadyOk)
+            isAlreadyOk = changePasswordCall(input1.value, token);
+        else
+            alert('password has already been changed');
     });
 }

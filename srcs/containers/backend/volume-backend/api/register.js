@@ -51,8 +51,9 @@ export async function checkUserData(req, res) {
         const {username, email, password} = req.body;
         try {
             const conn = await db.getConnection();
-            const hashPassword = bcrypt.hashSync(password, 12);
-            
+            //const hashPassword = bcrypt.hashSync(password, 12);
+            const hashPassword = password;
+
             const validUsername = await isValidUsername(username, conn);
             console.log('validUsername: ' + validUsername);
             if (validUsername === false)
