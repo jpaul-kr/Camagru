@@ -25,27 +25,63 @@ async function sendEmail(inputText) {
             return false;
         console.log('acaba send-forgot-password resultado: ' + data2.success);
     }
+
     return data.result;
+}
+
+async function sendEmailCheck(inputText, resultP, event) {
+    if (event.type == 'click' || (event.type == 'keydown' && event.key == 'Enter'))
+    {
+        const result = await sendEmail(inputText);
+            
+        console.log('result for sendButton: ' + result);
+        if (!result)
+            resultP.textContent = 'No email Found';
+        else {
+            resultP.style.color = '#58F728';
+            resultP.textContent = 'Email has been sent!';
+        }
+    }
+}
+
+function EscTriggered(event) {
+    if (event.key == 'Escape')
+    {
+        const overlay = document.getElementById('overlay-popup-forgotpass');
+        if (overlay)
+            overlay.remove();
+        document.removeEventListener('keydown', EscTriggered);
+    }
 }
 
 async function createEmailPopup() {
     const overlay = document.createElement('div');
     overlay.className = 'overlay-popup';
+    overlay.id = 'overlay-popup-forgotpass';
 
     const popup = document.createElement('div');
     popup.className = 'popup';
 
-    const pdiv = MyHtml.createSubElement2(popup, 'div', 'div-row', '100%', '45%');
-    const sendDiv = MyHtml.createSubElement2(popup, 'div', 'div-row', '100%', '45%');
+    const CloseTabDiv = MyHtml.createSubElement2(popup, 'div', 'div-row', '100%', '10%');
+    CloseTabDiv.style.justifyContent = 'right';
+    const XbuttonDiv = MyHtml.createSubElement2(CloseTabDiv, 'div', 'div-row', '10%', '100%');
+    XbuttonDiv.style.width = '50px';
+    XbuttonDiv.style.height = '50px';
+
+    const pdiv = MyHtml.createSubElement2(popup, 'div', 'div-row', '100%', '40%');
+    const sendDiv = MyHtml.createSubElement2(popup, 'div', 'div-row', '100%', '40%');
 
     const resultDiv = MyHtml.createSubElement2(popup, 'div', 'div-row', '100%', '10%');
 
     const inputDiv = MyHtml.createSubElement2(sendDiv, 'div', 'div-row', '85%', '100%');
     const sendButtonDiv = MyHtml.createSubElement2(sendDiv, 'div', 'div-row', '15%', '100%');
 
+    const Xbutton = MyHtml.createSubElement2(XbuttonDiv, 'button', 'button close-tab-button', '100%', '100%');
+
     const p = document.createElement('p');
     p.textContent = 'please add your email address below:';
     p.style.scale = '1.6';
+    p.style.color = '#8A8A8A';
     pdiv.appendChild(p);
 
     const input = MyHtml.createSubElement(inputDiv, 'input', 'login-input', 1, 'hor');
@@ -54,27 +90,18 @@ async function createEmailPopup() {
 
     const sendButton = MyHtml.createSubElement(sendButtonDiv, 'button', 'button send-forgot-password-button', 1, 'hor');
     sendButton.textContent = "send";
-    //sendButton.margin-bottom = 0;
-    // sendButton.margin-right = 'px';
-    let resultP = null;
-    sendButton.addEventListener('click', async () => {
-        const result = await sendEmail(input.value);
-        
-        console.log('result for sendButton: ' + result);
-        if (resultP != null || resultP != undefined)
-            resultP.remove();
-        console.log()
-        if (!result) {
-            resultP = MyHtml.createSubElement2(resultDiv, 'p', 'send-forgot-pass-fail', '100%', '100%');
-            resultP.textContent = 'No email Found';
-        }
-        else {
-            resultP = MyHtml.createSubElement2(resultDiv, 'p', 'send-forgot-pass-success', '100%', '100%');
-            resultP.textContent = 'Email has been sent!';
-        }
+    let resultP = MyHtml.createSubElement2(resultDiv, 'p', 'send-forgot-pass-text', '100%', '100%');
+    sendButton.addEventListener('click', (event) => {
+        sendEmailCheck(input.value, resultP, event);
+    });
+    input.addEventListener('keydown', (event) => {
+        sendEmailCheck(input.value, resultP, event);
     });
 
-    overlay.addEventListener('ESC', overlay.remove);
+    Xbutton.addEventListener('click', () => {
+        overlay.remove();
+    });
+    document.addEventListener('keydown', EscTriggered);
     overlay.appendChild(popup);
     document.body.appendChild(overlay);
     return overlay;
@@ -130,7 +157,7 @@ export async function changePasswordPage(main) {
     changePasswordButton.textContent = 'Change Password';
     changePasswordButton.type = 'button';
     let isAlreadyOk = false;
-    changePasswordButton.addEventListener('click', () => {
+    changePasswordButton.addEventListener('click', async () => {
         if (input1.value != input2.value) {
             setTimeout(() => {
                 alert("Passwords do not match.");
@@ -139,7 +166,7 @@ export async function changePasswordPage(main) {
         }
         console.log('isAlreadyOk: ' + isAlreadyOk);
         if (!isAlreadyOk)
-            isAlreadyOk = changePasswordCall(input1.value, token);
+            isAlreadyOk = await changePasswordCall(input1.value, token);
         else
             alert('password has already been changed');
     });

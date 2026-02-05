@@ -63,17 +63,16 @@ export async function changeUserPassword(email, password) {
         }
         console.log('llega1');
         const oldPassword = rows[0].password;
-        const match = await bcrypt.compare(oldPassword, password);
+        const match = await bcrypt.compare(password, oldPassword);
         console.log('match: ' + match);
         if (match) {
             conn.release();
             return {success: false, message: 'The password is the same as before'};
         }
-        console.log('llega2');
-        await conn.query(`UPDATE users SET password = ? WHERE email = ?`, [password, email]);
-        console.log('llega3');
+        const hashPassword = await bcrypt.hashSync(password, 12);
+
+        await conn.query(`UPDATE users SET password = ? WHERE email = ?`, [hashPassword, email]);
         await conn.query(`DELETE FROM change_password WHERE email = ?`, [email]);
-        console.log('llega4');
         conn.release();
         return {success: true, message: 'Success!! You can now go back to login'};
     }

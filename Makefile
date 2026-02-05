@@ -8,8 +8,8 @@ clean:
 	@docker-compose -f $(DOCKER_DIR) down --volumes --remove-orphans
 
 fclean: clean
-	@docker system prune -a -f
-
+	@docker system prune -af --volumes
+ 
 re: clean all
 
 .PHONY: all clean fclean re

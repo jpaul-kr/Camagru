@@ -1,5 +1,4 @@
 import {db, changeUserPassword} from '../database.js';
-import bcrypt from 'bcryptjs';
 
 export async function resetPassword(req, res) {
     let body = '';
@@ -24,10 +23,9 @@ export async function resetPassword(req, res) {
 
             const email = rows[0].email;
             console.log('email: ' + email + ' password: ' + newPassword);
-            const hashPassword = await bcrypt.hashSync(newPassword, 12);
             //const hashPassword = newPassword;
 
-            const result = await changeUserPassword(email, hashPassword);
+            const result = await changeUserPassword(email, newPassword);
             conn.release();
             res.end(JSON.stringify({success: result.success, message: result.message}));
         }
