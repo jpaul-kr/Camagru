@@ -76,7 +76,7 @@ async function createEmailPopup() {
     const inputDiv = MyHtml.createSubElement2(sendDiv, 'div', 'div-row', '85%', '100%');
     const sendButtonDiv = MyHtml.createSubElement2(sendDiv, 'div', 'div-row', '15%', '100%');
 
-    const Xbutton = MyHtml.createSubElement2(XbuttonDiv, 'button', 'button close-tab-button', '100%', '100%');
+    const Xbutton = MyHtml.createSubElement2(XbuttonDiv, 'button', 'close-tab-button', '100%', '100%');
 
     const p = document.createElement('p');
     p.textContent = 'please add your email address below:';

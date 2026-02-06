@@ -2,6 +2,45 @@ import { MyHtml } from "../../../myHtml.js";
 import { loginPage } from "./login.js";
 import { checkData, sendConfirmationEmail } from "./register.js";
 
+function passwordCheck(pass1, pass2) {
+    const resultContainer = document.getElementById('register-result-container');
+    if (!resultContainer)
+        return false;
+
+    if (pass1 !== pass2) {
+        addImage(resultContainer, false);
+        setTimeout(() => {
+            alert("Passwords do not match.");
+        }, 50);
+        return false;
+    }
+
+    if (pass1.length < 8) {
+        addImage(resultContainer, false);
+        setTimeout(() => {
+            alert("Password has to be minimum 8 characters long.");
+        }, 50);
+        return false;
+    }
+
+    if (pass1.includes(" ") || pass1.includes('/t') || pass1.includes('/v')) {
+        addImage(resultContainer, false);
+        setTimeout(() => {
+            alert("Password cannot have spaces or tabs.");
+        }, 50);
+        return false;
+    }
+
+    if (!/[a-z]/.test(pass1) || !/[A-Z]/.test(pass1) || !/\d/.test(pass1) || !/[^A-Za-z0-9]/.test(pass1)) {
+        addImage(resultContainer, false);
+        setTimeout(() => {
+            alert("Password MUST have uppercase, lowercase, numbers and symbols.");
+        }, 50);
+        return false;
+    }
+    return true;
+}
+
 function addImage(resultContainer, isOk) {
     const result = document.createElement('img');
     result.src = (isOk ? '../../../images/success.png' : '../../../images/failure.png');
@@ -24,24 +63,19 @@ async function registrationFormHandler(event) {
 
     const username = usernameInput.value.trim();
     const email = emailInput.value.trim();
-    const password1 = password1Input.value;
-    const password2 = password2Input.value;
+    const password1 = password1Input.value.toString();
+    const password2 = password2Input.value.toString();
 
     if (!username || !email || !password1 || !password2) {
         addImage(resultContainer, false);
         setTimeout(() => {
             alert("Please fill in all fields.");
         }, 50);
-        return;
+        return ;
     }
 
-    if (password1 !== password2) {
-        addImage(resultContainer, false);
-        setTimeout(() => {
-            alert("Passwords do not match.");
-        }, 50);
-        return;
-    }
+    if (!passwordCheck(password1, password2))
+        return ;
 
     // Here you would typically send the registration data to the server
     console.log("Registering user:", { username, email, password: password1 });
@@ -109,6 +143,9 @@ function createRegisterForm(formContainer) {
         }
         arrayDiv.push(div);
     }
+    const inputpass1 = document.getElementById('register-password1-input');
+    const inputpass2 = document.getElementById('register-password2-input');
+
     const buttonsDiv = arrayDiv[4];
     const registerButtonDiv = MyHtml.createSubElement(buttonsDiv, 'div', 'div-column', 2, "hor");
     registerButtonDiv.style.width = "66%";
@@ -135,6 +172,14 @@ function createRegisterForm(formContainer) {
     });
 
     registerButton.addEventListener('click', registrationFormHandler);
+    inputpass1.addEventListener('keydown', (event) => {
+        if (event.key == 'Enter')
+            registrationFormHandler();
+    });
+    inputpass2.addEventListener('keydown', (event) => {
+        if (event.key == 'Enter')
+            registrationFormHandler();
+    });
 
     return registerForm;
 }

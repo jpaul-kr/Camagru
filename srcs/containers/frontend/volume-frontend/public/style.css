@@ -265,4 +265,15 @@
     background-repeat: no-repeat;
     background-position: center;
     border: none;
+    transition: 0.2s ease;
+    cursor: pointer;
+}
+
+.close-tab-button:hover {
+    filter: brightness(0.85);
+}
+
+.close-tab-button:active {
+    transform: scale(0.95);
+    filter: brightness(0.7);
 }
