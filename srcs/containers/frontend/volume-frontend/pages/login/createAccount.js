@@ -2,13 +2,12 @@ import { MyHtml } from "../../../myHtml.js";
 import { loginPage } from "./login.js";
 import { checkData, sendConfirmationEmail } from "./register.js";
 
-function passwordCheck(pass1, pass2) {
+export function passwordCheck(pass1, pass2) {
     const resultContainer = document.getElementById('register-result-container');
-    if (!resultContainer)
-        return false;
 
     if (pass1 !== pass2) {
-        addImage(resultContainer, false);
+        if (resultContainer)
+            addImage(resultContainer, false);
         setTimeout(() => {
             alert("Passwords do not match.");
         }, 50);
@@ -16,7 +15,8 @@ function passwordCheck(pass1, pass2) {
     }
 
     if (pass1.length < 8) {
-        addImage(resultContainer, false);
+        if (resultContainer)
+            addImage(resultContainer, false);
         setTimeout(() => {
             alert("Password has to be minimum 8 characters long.");
         }, 50);
@@ -24,7 +24,8 @@ function passwordCheck(pass1, pass2) {
     }
 
     if (pass1.includes(" ") || pass1.includes('/t') || pass1.includes('/v')) {
-        addImage(resultContainer, false);
+        if (resultContainer)
+            addImage(resultContainer, false);
         setTimeout(() => {
             alert("Password cannot have spaces or tabs.");
         }, 50);
@@ -32,7 +33,8 @@ function passwordCheck(pass1, pass2) {
     }
 
     if (!/[a-z]/.test(pass1) || !/[A-Z]/.test(pass1) || !/\d/.test(pass1) || !/[^A-Za-z0-9]/.test(pass1)) {
-        addImage(resultContainer, false);
+        if (resultContainer)
+            addImage(resultContainer, false);
         setTimeout(() => {
             alert("Password MUST have uppercase, lowercase, numbers and symbols.");
         }, 50);
@@ -116,6 +118,11 @@ function createRegisterForm(formContainer) {
         if (i < 4)
         {
             const input = MyHtml.createSubElement(div, 'input', 'login-input', 1, "hor");
+
+            input.addEventListener('keydown', (event) => {
+                if (event.key == 'Enter')
+                    registrationFormHandler(event);
+            });
             switch (i) {
                 case 0:
                     input.type = "text";
@@ -143,9 +150,6 @@ function createRegisterForm(formContainer) {
         }
         arrayDiv.push(div);
     }
-    const inputpass1 = document.getElementById('register-password1-input');
-    const inputpass2 = document.getElementById('register-password2-input');
-
     const buttonsDiv = arrayDiv[4];
     const registerButtonDiv = MyHtml.createSubElement(buttonsDiv, 'div', 'div-column', 2, "hor");
     registerButtonDiv.style.width = "66%";
@@ -172,15 +176,6 @@ function createRegisterForm(formContainer) {
     });
 
     registerButton.addEventListener('click', registrationFormHandler);
-    inputpass1.addEventListener('keydown', (event) => {
-        if (event.key == 'Enter')
-            registrationFormHandler();
-    });
-    inputpass2.addEventListener('keydown', (event) => {
-        if (event.key == 'Enter')
-            registrationFormHandler();
-    });
-
     return registerForm;
 }
 

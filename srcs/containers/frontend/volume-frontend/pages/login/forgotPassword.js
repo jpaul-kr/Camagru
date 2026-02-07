@@ -1,4 +1,5 @@
 import { MyHtml } from "../../../myHtml.js";
+import { passwordCheck } from "./createAccount.js";
 
 async function sendEmail(inputText) {
     console.log("entra en sendEmail");
@@ -131,6 +132,32 @@ async function changePasswordCall(input, token) {
     return data.success;
 }
 
+async function changePasswordCheck(isAlreadyOk, event, token) {
+    if (event.type == 'click' || (event.type == 'keydown' && event.key == 'Enter')) {
+        const input1 = document.getElementById('change-pass1');
+        const input2 = document.getElementById('change-pass2');
+
+        console.log('isAlreadyOk: ' + isAlreadyOk);
+        if (!input1 || !input2) {
+            alert('there has been an error trying to get passwords');
+            return false;
+        }
+        if (input1.value != input2.value) {
+            setTimeout(() => {
+                alert("Passwords do not match.");
+            }, 50);
+            return false;
+        }
+        if (!passwordCheck(input1.value, input2.value))
+            return false;
+        if (!isAlreadyOk)
+            isAlreadyOk = await changePasswordCall(input1.value, token);
+        else
+            alert('password has already been changed');
+        }
+        return isAlreadyOk;
+}
+
 export async function changePasswordPage(main) {
     let token = new URLSearchParams(window.location.search).get('token');
 
@@ -146,9 +173,13 @@ export async function changePasswordPage(main) {
 
     const input1 = MyHtml.createSubElement2(input1Div, 'input', 'login-input', '80%', null);
     input1.placeholder = 'New Password';
+    input1.type = 'Password';
+    input1.id = 'change-pass1';
 
     const input2 = MyHtml.createSubElement2(input2Div, 'input', 'login-input', '80%', null);
     input2.placeholder = 'Confirm New Password';
+    input2.type = 'Password';
+    input2.id = 'change-pass2';
 
     lineDiv.style.borderBottom = "2px solid #B0B0B0";
     lineDiv.style.width = "80%";
@@ -157,17 +188,16 @@ export async function changePasswordPage(main) {
     changePasswordButton.textContent = 'Change Password';
     changePasswordButton.type = 'button';
     let isAlreadyOk = false;
-    changePasswordButton.addEventListener('click', async () => {
-        if (input1.value != input2.value) {
-            setTimeout(() => {
-                alert("Passwords do not match.");
-            }, 50);
-            return ;
-        }
-        console.log('isAlreadyOk: ' + isAlreadyOk);
+    changePasswordButton.addEventListener('click', async (event) => {
         if (!isAlreadyOk)
-            isAlreadyOk = await changePasswordCall(input1.value, token);
-        else
-            alert('password has already been changed');
+            isAlreadyOk = await changePasswordCheck(isAlreadyOk, event, token);
+    });
+    input1.addEventListener('keydown', async (event) => {
+        if (!isAlreadyOk)
+            isAlreadyOk = await changePasswordCheck(isAlreadyOk, event, token);
+    });
+    input2.addEventListener('keydown', async (event) => {
+        if (!isAlreadyOk)
+            isAlreadyOk = await changePasswordCheck(isAlreadyOk, event, token);
     });
 }
