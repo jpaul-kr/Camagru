@@ -1,6 +1,6 @@
 import { checkUserData, registerUser } from "./api/register.js";
 import { sendConfirmationEmail, sendForgotPasswordEmail } from "./api/sendEmail.js";
-import { checkEmail } from "./api/chackData.js";
+import { checkEmail, isValidPassword } from "./api/chackData.js";
 import { resetPassword } from "./api/resetPassword.js";
 
 
@@ -28,6 +28,10 @@ export const routes = {
   '/reset-password': {
     METHOD: 'POST',
     HANDLER: resetPassword
+  },
+  '/is-valid-password': {
+    METHOD: 'POST',
+    HANDLER: isValidPassword
   }
 }
 

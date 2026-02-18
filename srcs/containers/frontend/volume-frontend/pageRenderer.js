@@ -1,6 +1,7 @@
 import { loginPage } from "./pages/login/login.js";
 import { createAccountPage } from "./pages/login/createAccount.js";
 import { changePasswordPage } from "./pages/login/forgotPassword.js";
+import { homePage } from "./pages/home/homePage.js";
 
 
 export function gotoLogin() {
@@ -18,6 +19,11 @@ export function gotoResetPassword()  {
     pageRenderer(document.getElementById("main-section"));
 }
 
+export function gotoHomePage() {
+    history.pushState({}, '', '/home');
+    pageRenderer(document.getElementById("main-section"));
+}
+
 export function pageRenderer(main) {
     const pathname = window.location.pathname;
 
@@ -29,6 +35,8 @@ export function pageRenderer(main) {
         return createAccountPage(main);
     else if (pathname === '/reset-password')
         return changePasswordPage(main);
+    else if (pathname === '/home')
+        return homePage(main);
     else
         return loginPage(main);
 }   

@@ -2,41 +2,24 @@ import { MyHtml } from "../../../myHtml.js";
 import { loginPage } from "./login.js";
 import { checkData, sendConfirmationEmail } from "./register.js";
 
-export function passwordCheck(pass1, pass2) {
+export async function passwordCheck(pass1, pass2) {
     const resultContainer = document.getElementById('register-result-container');
 
-    if (pass1 !== pass2) {
-        if (resultContainer)
-            addImage(resultContainer, false);
-        setTimeout(() => {
-            alert("Passwords do not match.");
-        }, 50);
-        return false;
-    }
+    const res = await fetch(`http://localhost:8443/backend/is-valid-password`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'appliation/json',
+        },
+        body: JSON.stringify({pass1: pass1, pass2: pass2})
+    });
 
-    if (pass1.length < 8) {
-        if (resultContainer)
-            addImage(resultContainer, false);
-        setTimeout(() => {
-            alert("Password has to be minimum 8 characters long.");
-        }, 50);
-        return false;
-    }
+    const data = await res.json();
 
-    if (pass1.includes(" ") || pass1.includes('/t') || pass1.includes('/v')) {
+    if (!data.success) {
         if (resultContainer)
             addImage(resultContainer, false);
         setTimeout(() => {
-            alert("Password cannot have spaces or tabs.");
-        }, 50);
-        return false;
-    }
-
-    if (!/[a-z]/.test(pass1) || !/[A-Z]/.test(pass1) || !/\d/.test(pass1) || !/[^A-Za-z0-9]/.test(pass1)) {
-        if (resultContainer)
-            addImage(resultContainer, false);
-        setTimeout(() => {
-            alert("Password MUST have uppercase, lowercase, numbers and symbols.");
+            alert(data.message);
         }, 50);
         return false;
     }
@@ -76,10 +59,9 @@ async function registrationFormHandler(event) {
         return ;
     }
 
-    if (!passwordCheck(password1, password2))
+    if (!await passwordCheck(password1, password2))
         return ;
 
-    // Here you would typically send the registration data to the server
     console.log("Registering user:", { username, email, password: password1 });
     const data = await checkData(username, email, password1);
     if (data.success === false) {
