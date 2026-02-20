@@ -1,9 +1,51 @@
 import { MyHtml } from "../../../myHtml.js";
-import { gotoRegister } from "../../pageRenderer.js";
+import { gotoRegister, gotoHomePage } from "../../pageRenderer.js";
 import { forgotPasswordCall } from "./forgotPassword.js";
 //import { createAccountPage } from "./createAccount.js";
 
+async function loginCall(event, username, password) {
+    if (event.type === 'click' || (event.type === 'keydown' && event.key === 'Enter')) {
+        event.preventDefault();
+        console.log("Login clicked with username: " + username + " and password: " + password);
+        // await fetch('/backend/check-login', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({username: username, pass: password})
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //     if (data.success) {
+        //         console.log("Login successful");
+        //         gotoHomePage();
+        //     } else {
+        //         alert(data.message);
+        //     }
+        // })
+        // .catch(error => {
+        //     console.error('Error during login:', error);
+        //     alert('An error occurred during login. Please try again later.');
+        // });
+        const res = await fetch('http://localhost:8443/backend/check-login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({username: username, pass: password})
+        });
 
+        const data = await res.json();
+
+        if (data.success) {
+            alert("Login successful");
+            gotoHomePage();
+        }
+        else {
+            alert(data.message);
+        }
+    }
+}
 
 function createLoginForm(formContainer) {
     const loginForm = MyHtml.createSubElement(formContainer, 'form', 'login-form', 1, "hor");
@@ -16,11 +58,13 @@ function createLoginForm(formContainer) {
     const usernameInput = MyHtml.createSubElement(usernameDiv, 'input', 'login-input', 1, "hor");
     usernameInput.type = "text";
     usernameInput.placeholder = "Username";
+    usernameInput.addEventListener('keydown', (event) => loginCall(event, usernameInput.value, passwordInput.value));
 
     const passwordInput = MyHtml.createSubElement(passwordDiv, 'input', 'login-input', 1, "hor");
     passwordInput.type = "password";
     passwordInput.placeholder = "Password";
     passwordInput.style.marginBottom = "20px";
+    passwordInput.addEventListener('keydown', (event) => loginCall(event, usernameInput.value, passwordInput.value));
 
     const forgotPasswordLink = MyHtml.createSubElement(forgotPasswordDiv, 'a', 'login-forgotpassword', 1, "hor");
     forgotPasswordLink.href = "#";
@@ -30,8 +74,9 @@ function createLoginForm(formContainer) {
     forgotPasswordLink.addEventListener('click', forgotPasswordCall);
 
     const loginButton = MyHtml.createSubElement(loginButtonDiv, 'button', 'button login-button', 1, "hor");
-    loginButton.type = "submit";
+    loginButton.type = "button";
     loginButton.textContent = "Login";
+    loginButton.addEventListener('click', (event) => loginCall(event, usernameInput.value, passwordInput.value));
 
     const createAccountButton = MyHtml.createSubElement(createAccountDiv, 'button', 'button login-createaccount-button', 1, "hor");
     createAccountButton.type = "button";

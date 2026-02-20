@@ -1,6 +1,7 @@
 
 //import dotenv from 'dotenv';
 import { pageRenderer } from './volume-frontend/pageRenderer.js';
+import { MyHtml } from './myHtml.js'
 //import { gotoLogin } from './volume-frontend/pageRenderer.js';
 //import { loginPage } from './volume-frontend/pages/login/login.js';
 
@@ -28,12 +29,9 @@ function createTop() {
     title.textContent = "Camagru";
     top.appendChild(title);
 
-    const logo = document.createElement('img');
-    logo.style.height = "100%";
-    logo.style.width = "200px";
-    logo.src = './images/logo.png';
-    top.appendChild(logo);
-    top.id = "top_section";
+    const logo = MyHtml.createSubElement2(top, 'div', 'logo', '200px', '200px');
+    // logo.src = './images/logo.png';
+    top.id = "top-section";
     
     document.body.appendChild(top);
     return top;

@@ -1,4 +1,4 @@
-import mariadb from 'mariadb';
+import * as mariadb from 'mariadb';
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
 import { error } from 'console';
@@ -27,6 +27,22 @@ export async function checkDbData(table, key, value) {
     catch(error) {
         console.log(`error trying to find ${value} in ${table}: ${error.message}`);
     }
+}
+
+export async function getDbData(table, key, value) {
+    try {
+        const conn = await db.getConnection();
+        const rows = await conn.query(`SELECT * FROM ${table} WHERE ${key} = ?`, [value]);
+        const user = rows[0];
+        conn.release();
+        if (user === undefined)
+            return false;
+        return user;
+    }
+    catch(error) {
+        console.log(`error trying to get ${value} in ${table}: ${error.message}`);
+    }
+
 }
 
 export async function addToPendingUsers(username, email, password, token) {
@@ -61,7 +77,6 @@ export async function changeUserPassword(email, password) {
             conn.release();
             return {success: false, message: 'Could not find email'};
         }
-        console.log('llega1');
         const oldPassword = rows[0].password;
         const match = await bcrypt.compare(password, oldPassword);
         console.log('match: ' + match);

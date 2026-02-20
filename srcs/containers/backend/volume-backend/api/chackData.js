@@ -1,4 +1,5 @@
-import {checkDbData} from '../database.js';
+import {checkDbData, getDbData} from '../database.js';
+import bcrypt from 'bcryptjs';
 
 export async function checkEmail(req, res) {
     let body = '';
@@ -16,6 +17,36 @@ export async function checkEmail(req, res) {
         }
         catch (error) {
             console.log('error checking email: ' + error.message);
+        }
+    });
+}
+
+export async function checkLogin(req, res) {
+    console.log('enters check login');
+    let body = '';
+    req.on('data', chunk => {
+        body += chunk.toString();
+    });
+    req.on('end', async () => {
+        try { 
+            req.body = JSON.parse(body);
+            const {pass, username} = req.body;
+
+            const user = await getDbData('users', 'username', username);
+            if (!user) {
+                res.end(JSON.stringify({success: false, message: 'User not found.'}));
+                return;
+            }
+            const isPasswordOk = await bcrypt.compare(pass, user.password);
+            if (!isPasswordOk) {
+                res.end(JSON.stringify({success: false, message: 'Incorrect password.'}));
+                return;
+            }
+            res.end(JSON.stringify({success: true, message: 'ok'}));
+        }
+        catch (error) {
+            console.log('error checking login: ' + error.message);
+            res.end(JSON.stringify({success: false, message: 'Something went wrong'}));
         }
     });
 }

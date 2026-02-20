@@ -1,6 +1,6 @@
 import { checkUserData, registerUser } from "./api/register.js";
 import { sendConfirmationEmail, sendForgotPasswordEmail } from "./api/sendEmail.js";
-import { checkEmail, isValidPassword } from "./api/chackData.js";
+import { checkEmail, isValidPassword, checkLogin } from "./api/chackData.js";
 import { resetPassword } from "./api/resetPassword.js";
 
 
@@ -32,11 +32,15 @@ export const routes = {
   '/is-valid-password': {
     METHOD: 'POST',
     HANDLER: isValidPassword
+  },
+  '/check-login': {
+    METHOD: 'POST',
+    HANDLER: checkLogin
   }
 }
 
 export function routeHandler(req, res) {
-  const {url, method} = req;
+  const {method} = req;
   const urlPath = new URL(req.url, `http://${req.headers.host}`).pathname;
   console.log(`Received ${method} request for ${urlPath}`);
   const path = routes[urlPath];

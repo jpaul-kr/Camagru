@@ -15,6 +15,13 @@
     height: 200px;
 }
 
+.logo {
+    background-image: url("./images/logo.png");
+    background-size: cover;
+    background-position: center;
+    border-color: none;
+}
+
 @font-face {
     font-family: "Action Man";
     src: url("./fonts/ActionMan-Bold.woff2") format("woff2");
