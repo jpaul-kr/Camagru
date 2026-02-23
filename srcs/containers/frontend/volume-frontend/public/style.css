@@ -73,6 +73,13 @@
     height: 100%;
 }
 
+.div-top {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    margin-bottom: 10px;
+}
+
 .login {
     display: flex;
     flex-direction: row;
@@ -283,4 +290,13 @@
 .close-tab-button:active {
     transform: scale(0.95);
     filter: brightness(0.7);
+}
+
+.img-button {
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
 }
