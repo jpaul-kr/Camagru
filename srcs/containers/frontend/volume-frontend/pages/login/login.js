@@ -1,6 +1,7 @@
 import { MyHtml } from "../../../myHtml.js";
 import { gotoRegister, gotoHomePage } from "../../pageRenderer.js";
 import { forgotPasswordCall } from "./forgotPassword.js";
+import { loginTop } from "../home/topSection.js";
 //import { createAccountPage } from "./createAccount.js";
 
 async function loginCall(event, username, password) {
@@ -89,6 +90,7 @@ function createLoginForm(formContainer) {
 export function loginPage(main) {
     const loginContainer = MyHtml.createElement('div', 'login');
     loginContainer.id = "login-container";
+    const top = loginTop();
 
     const welcomeContainer = MyHtml.createSubElement(loginContainer, 'div', "div-column", 2, "hor");
 

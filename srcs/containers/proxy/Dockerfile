@@ -5,10 +5,13 @@ RUN apt-get update && apt-get install -y wget
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 
 RUN apt install vim -y && apt install git -y
-RUN apt-get install bison build-essential ca-certificates curl dh-autoreconf doxygen \
-    flex gawk git iputils-ping libcurl4-gnutls-dev libexpat1-dev libgeoip-dev liblmdb-dev \ 
-    libpcre3-dev libpcre2-dev libpcre++-dev libssl-dev libtool libxml2 libxml2-dev libyajl-dev locales \
-    lua5.3-dev pkg-config wget zlib1g-dev libxslt-dev libgd-dev -y
+RUN apt-get update && \
+	apt-get install -y --no-install-recommends -o Acquire::Retries=3 \
+	bison build-essential ca-certificates curl dh-autoreconf doxygen \
+	flex gawk git iputils-ping libcurl4-gnutls-dev libexpat1-dev libgeoip-dev liblmdb-dev \
+	libpcre3-dev libpcre2-dev libpcre++-dev libssl-dev libtool libxml2 libxml2-dev libyajl-dev locales \
+	lua5.3-dev pkg-config wget zlib1g-dev libxslt-dev libgd-dev && \
+	rm -rf /var/lib/apt/lists/*
 
 
 WORKDIR /opt/
