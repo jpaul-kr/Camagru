@@ -11,6 +11,7 @@ RUN npm install axios
 RUN npm install dotenv
 RUN npm install bcryptjs
 RUN npm install nodemailer
+RUN npm install jsonwebtoken cookie-parser
 
 EXPOSE 3000
 

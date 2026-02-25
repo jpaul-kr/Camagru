@@ -22,5 +22,7 @@ vault secrets enable -path=Camagru kv
 vault token create -policy=vault-policy -orphan -id=$VAULT_TOKEN_ID
 
 vault kv put Camagru/email_pass email-pass="$EMAIL_PASSWORD"
+vault kv put Camagru/access_token_cookie access-token-cookie="$ACCESS_TOKEN_COOKIE"
+vault kv put Camagru/refresh_token_cookie refresh-token-cookie="$REFRESH_TOKEN_COOKIE"
 
 wait $VAULT_PID

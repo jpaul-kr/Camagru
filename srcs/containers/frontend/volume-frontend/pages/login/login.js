@@ -2,32 +2,20 @@ import { MyHtml } from "../../../myHtml.js";
 import { gotoRegister, gotoHomePage } from "../../pageRenderer.js";
 import { forgotPasswordCall } from "./forgotPassword.js";
 import { loginTop } from "../home/topSection.js";
-//import { createAccountPage } from "./createAccount.js";
+
+function visiblePass(input, button) {
+    input.type = (input.type == 'password' ? input.type = 'text' : input.type = 'password');
+    //console.log('inputPass ' + input.type);
+    if (input.type == 'password')
+        button.style.backgroundImage = 'url("./images/invisible_password.png")';
+    else
+        button.style.backgroundImage = 'url("./images/visible_password.png")';
+}
 
 async function loginCall(event, username, password) {
     if (event.type === 'click' || (event.type === 'keydown' && event.key === 'Enter')) {
         event.preventDefault();
         console.log("Login clicked with username: " + username + " and password: " + password);
-        // await fetch('/backend/check-login', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({username: username, pass: password})
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     if (data.success) {
-        //         console.log("Login successful");
-        //         gotoHomePage();
-        //     } else {
-        //         alert(data.message);
-        //     }
-        // })
-        // .catch(error => {
-        //     console.error('Error during login:', error);
-        //     alert('An error occurred during login. Please try again later.');
-        // });
         const res = await fetch('http://localhost:8443/backend/check-login', {
             method: 'POST',
             headers: {
@@ -65,6 +53,7 @@ function createLoginForm(formContainer) {
     passwordInput.type = "password";
     passwordInput.placeholder = "Password";
     passwordInput.style.marginBottom = "20px";
+    passwordInput.id = 'login-password-input';
     passwordInput.addEventListener('keydown', (event) => loginCall(event, usernameInput.value, passwordInput.value));
 
     const forgotPasswordLink = MyHtml.createSubElement(forgotPasswordDiv, 'a', 'login-forgotpassword', 1, "hor");
@@ -83,7 +72,7 @@ function createLoginForm(formContainer) {
     createAccountButton.type = "button";
     createAccountButton.textContent = "Create Account";
     createAccountButton.addEventListener('click', gotoRegister);
-
+    
     return loginForm;
 }
 
@@ -91,6 +80,7 @@ export function loginPage(main) {
     const loginContainer = MyHtml.createElement('div', 'login');
     loginContainer.id = "login-container";
     const top = loginTop();
+    main.appendChild(loginContainer);
 
     const welcomeContainer = MyHtml.createSubElement(loginContainer, 'div', "div-column", 2, "hor");
 
@@ -108,6 +98,18 @@ export function loginPage(main) {
     const formContainer = MyHtml.createSubElement(loginContainer, 'div', 'login', 2, "hor"); 
 
     const loginForm = createLoginForm(formContainer);
-    main.appendChild(loginContainer);
+    const visiblePassContainer = MyHtml.createSubElement2(formContainer, 'div', 'div-row', '20%', '100%');
+    const visiblePassButton = MyHtml.createSubElement2(visiblePassContainer, 'button', 'button visible-pass-button', '60px', '60px');
+    visiblePassButton.style.marginBottom = '172px';
+    visiblePassButton.style.marginLeft = '12px';
+    visiblePassContainer.style.justifyContent = 'left';
+
+    const inputPass = document.getElementById('login-password-input');
+    if (!inputPass) {
+        console.log('no inputPass detected');
+        return ;
+    }
+    visiblePassButton.addEventListener('click', () => {visiblePass(inputPass, visiblePassButton);});
+
     return loginContainer;
 }

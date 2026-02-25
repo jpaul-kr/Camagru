@@ -9,7 +9,8 @@ function topButtons(top) {
 	const searchDiv = MyHtml.createSubElement2(buttonsDiv, 'div', 'div-top', '20%', '100%');
 
 	inputDiv.style.display = 'none';
-	
+	inputDiv.style.justifyContent = 'right';
+
 	const logoutButton = MyHtml.createSubElement2(logoutDiv, 'button', 'button img-button', null, null);
 	logoutButton.style.backgroundImage = 'url("./images/logout.png")';
 

@@ -62,7 +62,7 @@ async function registrationFormHandler(event) {
     if (!await passwordCheck(password1, password2))
         return ;
 
-    console.log("Registering user:", { username, email, password: password1 });
+    //console.log("Registering user:", { username, email, password: password1 });
     const data = await checkData(username, email, password1);
     if (data.success === false) {
         addImage(resultContainer, false);
@@ -91,6 +91,7 @@ function createRegisterForm(formContainer) {
     const registerForm = MyHtml.createSubElement(formContainer, 'form', 'login-form', 1, "hor");
     registerForm.id = "register-form";
     registerForm.style.marginRight = "0px";
+    let inputPass1, inputPass2;
     const arrayDiv = [];
 
     registerForm.style.height = "600px";
@@ -120,11 +121,13 @@ function createRegisterForm(formContainer) {
                     input.type = "password";
                     input.placeholder = "Password";
                     input.id = "register-password1-input";
+                    inputPass1 = input;
                     break;
                 case 3:
                     input.type = "password";
                     input.placeholder = "Confirm Password";
                     input.id = "register-password2-input";
+                    inputPass2 = input;
                     break;
                 default:
                     break;
@@ -133,13 +136,32 @@ function createRegisterForm(formContainer) {
         arrayDiv.push(div);
     }
     const buttonsDiv = arrayDiv[4];
-    const registerButtonDiv = MyHtml.createSubElement(buttonsDiv, 'div', 'div-column', 2, "hor");
-    registerButtonDiv.style.width = "66%";
+
+    const togglePassButtonDiv = MyHtml.createSubElement2(buttonsDiv, 'div', 'div-row', '22%', '100%');
+
+    const registerButtonDiv = MyHtml.createSubElement2(buttonsDiv, 'div', 'div-column', '44%', '100%');
+    //registerButtonDiv.style.width = "44%";
     registerButtonDiv.style.alignItems = "flex-end";
 
-    const goBackButtonDiv = MyHtml.createSubElement(buttonsDiv, 'div', 'div-column', 2, "hor");
-    goBackButtonDiv.style.width = "34%";
+    const goBackButtonDiv = MyHtml.createSubElement2(buttonsDiv, 'div', 'div-column', '34%', '100%');
+    //goBackButtonDiv.style.width = "34%";
     goBackButtonDiv.style.alignItems = "flex-end";
+
+    const togglePassButton = MyHtml.createSubElement2(togglePassButtonDiv, 'button', 'button visible-pass-button', '60px', '60px');
+    togglePassButton.type = 'button';
+    togglePassButton.style.marginBottom = '23px';
+    togglePassButton.addEventListener('click', () => {
+        if (inputPass1.type == 'password') {
+            inputPass1.type = 'text';
+            inputPass2.type = 'text';
+            togglePassButton.style.backgroundImage = 'url("./images/visible_password.png")';
+        }
+        else {
+            inputPass1.type = 'password';
+            inputPass2.type = 'password';
+            togglePassButton.style.backgroundImage = 'url("./images/invisible_password.png")';
+        }
+    });
 
     const registerButton = MyHtml.createSubElement(registerButtonDiv, 'button', 'button register-button', 1, "hor");
     registerButton.type = "button";
@@ -163,16 +185,6 @@ function createRegisterForm(formContainer) {
 
 export function createAccountPage(main) {
     console.log("Create Account clicked");
-    // const loginContainer = document.getElementById("login-container");
-    // if (loginContainer == null)
-    //     return;
-    // loginContainer.remove();
-
-    // const main = document.getElementById("main-section");
-    // if (main == null)
-    //     return;
-
-    console.log("llega " + main);
     const registerContainer = MyHtml.createElement('div', 'login');
     registerContainer.id = "register-container";
     registerContainer.style.flexDirection = "column";

@@ -125,7 +125,6 @@
     background-color: white;
     border-radius: 8px;
     box-shadow: #878787 0px 8px 16px;
-    margin-right: 221px;
 }
 
 .login-input {
@@ -183,7 +182,7 @@
     background-color: #3CF03C;
     color: white;
     border: none;
-    width: 50%;
+    width: 75%;
     font-size: 21px;
     font-weight: 750;
     margin-bottom: 23px;
@@ -311,4 +310,15 @@
     font-family: Arial, sans-serif;
     font-size: 14px;
     color: black;
+}
+
+.visible-pass-button {
+    border: 2px solid #B0B0B0;
+    border-radius: 6px;
+    background-image: url('./images/invisible_password.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: 0.2s ease;
+    cursor: pointer;
 }

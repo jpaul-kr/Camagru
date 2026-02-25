@@ -1,5 +1,7 @@
 import {checkDbData, getDbData} from '../database.js';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { getSecret } from '../getSecret.js';
 
 export async function checkEmail(req, res) {
     let body = '';
@@ -32,6 +34,9 @@ export async function checkLogin(req, res) {
             req.body = JSON.parse(body);
             const {pass, username} = req.body;
 
+            const accessTokenCookie = await getSecret('access_token_cookie', 'access-token-cookie');
+            const refreshTokenCookie = await getSecret('refresh_token_cookie', 'refresh-token-cookie');
+
             const user = await getDbData('users', 'username', username);
             if (!user) {
                 res.end(JSON.stringify({success: false, message: 'User not found.'}));
@@ -42,6 +47,31 @@ export async function checkLogin(req, res) {
                 res.end(JSON.stringify({success: false, message: 'Incorrect password.'}));
                 return;
             }
+
+            const accessToken = jwt.sign(
+                {username},
+                accessTokenCookie,
+                {expiresIn: "15m"}
+            );
+
+            const refreshToken = jwt.sign(
+                {username},
+                refreshTokenCookie,
+                {expiresIn: "7d"}
+            );
+
+            res.cookie('accessToken', accessToken, { // res.cookie no es una funcion me dice
+                httpOnly: true,
+                secure: true,
+                sameSite: 'strict'
+            });
+
+            res.cookie('refreshToken', refreshToken, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'strict'
+            });
+
             res.end(JSON.stringify({success: true, message: 'ok'}));
         }
         catch (error) {
