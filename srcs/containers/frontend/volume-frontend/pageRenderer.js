@@ -19,7 +19,10 @@ export function gotoResetPassword()  {
     pageRenderer(document.getElementById("main-section"));
 }
 
-export function gotoHomePage() {
+export async function gotoHomePage() {
+    const auth = await authCookie();
+    if (!auth)
+        return ;
     history.pushState({}, '', '/home');
     pageRenderer(document.getElementById("main-section"));
 }
@@ -39,4 +42,19 @@ export function pageRenderer(main) {
         return homePage(main);
     else
         return loginPage(main);
-}   
+}
+
+async function authCookie() {
+    const res = await fetch(`http://localhost:8443/backend/check-cookie`, {
+        method: 'GET',
+        credentials: 'include'
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+        res.writeHead(401, data.message);
+        return false;
+    }
+    return true;
+}

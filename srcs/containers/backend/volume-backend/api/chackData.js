@@ -60,17 +60,10 @@ export async function checkLogin(req, res) {
                 {expiresIn: "7d"}
             );
 
-            res.cookie('accessToken', accessToken, { // res.cookie no es una funcion me dice
-                httpOnly: true,
-                secure: true,
-                sameSite: 'strict'
-            });
-
-            res.cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                secure: true,
-                sameSite: 'strict'
-            });
+            res.setHeader('Set-Cookie', [
+                `accessToken=${accessToken}; HttpOnly; Secure; Path=/; SameSite=Strict`
+                `refreshToken=${refreshToken}; HttpOnly; Secure; Path=/; SameSite=Strict`
+            ]);
 
             res.end(JSON.stringify({success: true, message: 'ok'}));
         }

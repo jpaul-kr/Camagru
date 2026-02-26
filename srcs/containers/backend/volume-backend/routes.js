@@ -2,6 +2,7 @@ import { checkUserData, registerUser } from "./api/register.js";
 import { sendConfirmationEmail, sendForgotPasswordEmail } from "./api/sendEmail.js";
 import { checkEmail, isValidPassword, checkLogin } from "./api/chackData.js";
 import { resetPassword } from "./api/resetPassword.js";
+import { authenticate } from "./cookieCheck.js";
 
 
 export const routes = {
@@ -36,6 +37,10 @@ export const routes = {
   '/check-login': {
     METHOD: 'POST',
     HANDLER: checkLogin
+  },
+  '/check-cookie': {
+    METHOD: 'GET',
+    HANDLER: authenticate
   }
 }
 
