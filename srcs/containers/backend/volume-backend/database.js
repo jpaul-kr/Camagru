@@ -45,6 +45,30 @@ export async function getDbData(table, key, value) {
 
 }
 
+export async function updateDbData(table, username, key, value) {
+    try {
+        const conn = await db.getConnection();
+        await conn.query(`UPDATE ${table} SET ${key} = ? WHERE username = ?`, [value, username]);
+        conn.release();
+        return ;
+    }
+    catch(error) {
+        console.log(`error trying to update ${value} in ${table}: ${error.message}`);
+    }
+}
+
+export async function addToRefreshTokens(username, token) {
+    try {
+        const conn = await db.getConnection();
+        await conn.query(`INSERT INTO refresh_tokens (username, token) VALUES (?, ?)`, [username, token]);
+        conn.release();
+    }
+    catch(error) {
+        console.log(`error trying to add to refresh_tokens: ${error.message}`);
+    }
+}
+
+
 export async function addToPendingUsers(username, email, password, token) {
     try {
         const conn = await db.getConnection();
@@ -128,6 +152,14 @@ async function initDb() {
             CREATE TABLE IF NOT EXISTS change_password (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 email VARCHAR(100) NOT NULL UNIQUE,
+                token VARCHAR(255) NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );`);
+
+        await conn.query(`
+            CREATE TABLE IF NOT EXISTS refresh_tokens (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                username VARCHAR(100) NOT NULL UNIQUE,
                 token VARCHAR(255) NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );`);

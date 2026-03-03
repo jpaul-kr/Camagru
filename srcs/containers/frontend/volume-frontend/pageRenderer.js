@@ -20,9 +20,6 @@ export function gotoResetPassword()  {
 }
 
 export async function gotoHomePage() {
-    const auth = await authCookie();
-    if (!auth)
-        return ;
     history.pushState({}, '', '/home');
     pageRenderer(document.getElementById("main-section"));
 }
@@ -44,7 +41,8 @@ export function pageRenderer(main) {
         return loginPage(main);
 }
 
-async function authCookie() {
+export async function authCookie() {
+    console.log('enters auth Cookie');
     const res = await fetch(`http://localhost:8443/backend/check-cookie`, {
         method: 'GET',
         credentials: 'include'
@@ -52,9 +50,15 @@ async function authCookie() {
 
     const data = await res.json();
 
-    if (!data.success) {
-        res.writeHead(401, data.message);
-        return false;
-    }
-    return true;
+    if (data.message !== 'Unauthorized')
+        return data.success;
+    const res2 = await fetch(`http://localhost:8443/backend/refresh-cookie`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    });
+    const data2 = await res2.json();
+    return data2.success;
 }

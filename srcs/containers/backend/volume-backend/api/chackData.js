@@ -1,7 +1,8 @@
-import {checkDbData, getDbData} from '../database.js';
+import {checkDbData, getDbData, addToRefreshTokens} from '../database.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { getSecret } from '../getSecret.js';
+import { createCookie } from '../cookieCheck.js';
 
 export async function checkEmail(req, res) {
     let body = '';
@@ -33,11 +34,8 @@ export async function checkLogin(req, res) {
         try { 
             req.body = JSON.parse(body);
             const {pass, username} = req.body;
-
-            const accessTokenCookie = await getSecret('access_token_cookie', 'access-token-cookie');
-            const refreshTokenCookie = await getSecret('refresh_token_cookie', 'refresh-token-cookie');
-
             const user = await getDbData('users', 'username', username);
+
             if (!user) {
                 res.end(JSON.stringify({success: false, message: 'User not found.'}));
                 return;
@@ -47,24 +45,11 @@ export async function checkLogin(req, res) {
                 res.end(JSON.stringify({success: false, message: 'Incorrect password.'}));
                 return;
             }
-
-            const accessToken = jwt.sign(
-                {username},
-                accessTokenCookie,
-                {expiresIn: "15m"}
-            );
-
-            const refreshToken = jwt.sign(
-                {username},
-                refreshTokenCookie,
-                {expiresIn: "7d"}
-            );
-
+            const tokens = await createCookie(username);
             res.setHeader('Set-Cookie', [
-                `accessToken=${accessToken}; HttpOnly; Secure; Path=/; SameSite=Strict`
-                `refreshToken=${refreshToken}; HttpOnly; Secure; Path=/; SameSite=Strict`
-            ]);
-
+                `accessToken=${tokens.accessToken}; HttpOnly; Secure; Path=/; SameSite=Strict`,
+                `refreshToken=${tokens.refreshToken}; HttpOnly; Secure; Path=/; SameSite=Strict`]);
+            addToRefreshTokens(username, tokens.refreshToken);
             res.end(JSON.stringify({success: true, message: 'ok'}));
         }
         catch (error) {
