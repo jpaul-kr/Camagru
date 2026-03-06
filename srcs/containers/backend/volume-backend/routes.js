@@ -3,6 +3,7 @@ import { sendConfirmationEmail, sendForgotPasswordEmail } from "./api/sendEmail.
 import { checkEmail, isValidPassword, checkLogin } from "./api/chackData.js";
 import { resetPassword } from "./api/resetPassword.js";
 import { authenticate, refreshCookie } from "./cookieCheck.js";
+import { getSecret } from "./getSecret.js";
 
 
 export const routes = {
@@ -45,6 +46,10 @@ export const routes = {
   '/refresh-cookie': {
     METHOD: 'POST',
     HANDLER: refreshCookie
+  },
+  '/fetch-secret': {
+    METHOD: 'POST',
+    HANDLER: getSecret
   }
 }
 

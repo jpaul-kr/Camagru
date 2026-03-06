@@ -1,6 +1,10 @@
+import { getSecret } from "../../getSecret";
+
+const SERVER_ADDR = await getSecret('server_addr', 'server-addr');
+
 export async function checkData(username, email, password) {
     try {
-        const response = await fetch(`http://localhost:8443/backend/check-user-data`, {
+        const response = await fetch(`${SERVER_ADDR}/backend/check-user-data`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -17,7 +21,7 @@ export async function checkData(username, email, password) {
 
 export async function sendConfirmationEmail(username, email, password) {
     try {
-        const response = await fetch(`http://localhost:8443/backend/send-confirmation-email`, {
+        const response = await fetch(`${SERVER_ADDR}/backend/send-confirmation-email`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -34,7 +38,7 @@ export async function sendConfirmationEmail(username, email, password) {
 
 export async function registerUser(username, email, password) {
     try {
-        const response = await fetch(`http://localhost:8443/backend/register-user`, {
+        const response = await fetch(`${SERVER_ADDR}/backend/register-user`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

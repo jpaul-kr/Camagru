@@ -1,11 +1,14 @@
 import { MyHtml } from "../../../myHtml.js";
 import { loginPage } from "./login.js";
 import { checkData, sendConfirmationEmail } from "./register.js";
+import { getSecret } from "../../getSecret.js";
+
+const SERVER_ADDR = await getSecret('server_addr', 'server-addr');
 
 export async function passwordCheck(pass1, pass2) {
     const resultContainer = document.getElementById('register-result-container');
 
-    const res = await fetch(`http://localhost:8443/backend/is-valid-password`, {
+    const res = await fetch(`${SERVER_ADDR}/backend/is-valid-password`, {
         method: 'POST',
         headers: {
             'Content-Type': 'appliation/json',

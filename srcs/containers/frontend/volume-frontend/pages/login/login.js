@@ -2,6 +2,9 @@ import { MyHtml } from "../../../myHtml.js";
 import { gotoRegister, gotoHomePage } from "../../pageRenderer.js";
 import { forgotPasswordCall } from "./forgotPassword.js";
 import { loginTop } from "../home/topSection.js";
+import { getSecret } from "../../getSecret.js";
+
+const SERVER_ADDR = await getSecret('server_addr', 'server-addr');
 
 function visiblePass(input, button) {
     input.type = (input.type == 'password' ? input.type = 'text' : input.type = 'password');
@@ -15,8 +18,9 @@ function visiblePass(input, button) {
 async function loginCall(event, username, password) {
     if (event.type === 'click' || (event.type === 'keydown' && event.key === 'Enter')) {
         event.preventDefault();
+        console.log('server_addr: ' + SERVER_ADDR);
         console.log("Login clicked with username: " + username + " and password: " + password);
-        const res = await fetch('http://localhost:8443/backend/check-login', {
+        const res = await fetch(`${SERVER_ADDR}/backend/check-login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

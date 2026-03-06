@@ -2,7 +2,9 @@ import { loginPage } from "./pages/login/login.js";
 import { createAccountPage } from "./pages/login/createAccount.js";
 import { changePasswordPage } from "./pages/login/forgotPassword.js";
 import { homePage } from "./pages/home/homePage.js";
+import { getSecret } from "./getSecret.js";
 
+const SERVER_ADDR = await getSecret('server_addr', 'server-addr');
 
 export function gotoLogin() {
     history.pushState({}, '', '/login');
@@ -43,7 +45,7 @@ export function pageRenderer(main) {
 
 export async function authCookie() {
     console.log('enters auth Cookie');
-    const res = await fetch(`http://localhost:8443/backend/check-cookie`, {
+    const res = await fetch(`${SERVER_ADDR}/backend/check-cookie`, {
         method: 'GET',
         credentials: 'include'
     });
@@ -52,7 +54,7 @@ export async function authCookie() {
 
     if (data.message !== 'Unauthorized')
         return data.success;
-    const res2 = await fetch(`http://localhost:8443/backend/refresh-cookie`, {
+    const res2 = await fetch(`${SERVER_ADDR}/backend/refresh-cookie`, {
         method: 'POST',
         credentials: 'include',
         headers: {

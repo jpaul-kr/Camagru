@@ -3,6 +3,21 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+export async function fetchSecret(res, req) {
+    let body = '';
+
+    req.on('data', chunk => {
+        body += chunk.toString();
+    });
+    req.on('end', async () => {
+        req.body = JSON.parse(body);
+        const {apiUrl, key} = req.body;
+
+        const result = await getSecret(apiUrl, key);
+        res.end(JSON.stringify(result));
+    });
+}
+
 export async function getSecret(apiUrl, key) {
 
     try {

@@ -1,10 +1,13 @@
 import { MyHtml } from "../../../myHtml.js";
 import { passwordCheck } from "./createAccount.js";
+import { getSecret } from "../../getSecret.js";
+
+const SERVER_ADDR = await getSecret('server_addr', 'server-addr');
 
 async function sendEmail(inputText) {
     console.log("entra en sendEmail");
 
-    const res = await fetch(`http://localhost:8443/backend/check-email-exists`, {
+    const res = await fetch(`${SERVER_ADDR}/backend/check-email-exists`, {
         method: 'POST',
         headers: {
             'Content-Type': 'applicatin/json',
@@ -14,7 +17,7 @@ async function sendEmail(inputText) {
     const data = await res.json();
     console.log('acaba check-email-exists resultado: ' + data.result);
     if (data.result) {
-        const res2 = await fetch(`http://localhost:8443/backend/send-forgot-password-email`, {
+        const res2 = await fetch(`${SERVER_ADDR}/backend/send-forgot-password-email`, {
             method: 'POST',
             headers: {
                 'Content-type': 'applicatin/json',
@@ -118,7 +121,7 @@ export async function forgotPasswordCall() {
 async function changePasswordCall(input, token) {
     console.log('changePassword called ' + input);
 
-    const res = await fetch('http://localhost:8443/backend/reset-password', {
+    const res = await fetch(`${SERVER_ADDR}/backend/reset-password`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
