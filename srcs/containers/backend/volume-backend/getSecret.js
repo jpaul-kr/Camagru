@@ -3,18 +3,27 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export async function fetchSecret(res, req) {
+export async function fetchSecret(req, res) {
+    console.log('enters fetchSecret');
     let body = '';
 
     req.on('data', chunk => {
         body += chunk.toString();
     });
+    console.log('Received request to fetch secret: ', body);
     req.on('end', async () => {
         req.body = JSON.parse(body);
         const {apiUrl, key} = req.body;
-
-        const result = await getSecret(apiUrl, key);
-        res.end(JSON.stringify(result));
+        
+        try {
+            console.log(`Fetching secret for apiUrl: ${apiUrl} and key: ${key}`);
+            const result = await getSecret(apiUrl, key);
+            console.log('Fetched secret: ', result);
+            res.end(JSON.stringify(result));
+        } catch (error) {
+            console.error('Error in fetchSecret handler: ', error.message);
+            res.end('Internal Server Error');
+        }
     });
 }
 

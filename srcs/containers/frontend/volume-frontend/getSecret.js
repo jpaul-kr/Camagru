@@ -4,8 +4,8 @@ export async function getSecret(apiUrl, key) {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({apiUrl: apiUrl, key: key})
+        body: JSON.stringify({apiUrl, key}),
     });
-    const data = res.json();
+    const data = await res.json();
     return data;
 }

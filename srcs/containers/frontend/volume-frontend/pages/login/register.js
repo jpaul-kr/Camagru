@@ -1,4 +1,4 @@
-import { getSecret } from "../../getSecret";
+import { getSecret } from "../../getSecret.js";
 
 const SERVER_ADDR = await getSecret('server_addr', 'server-addr');
 
