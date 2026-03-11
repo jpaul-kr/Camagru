@@ -1,12 +1,11 @@
 import { MyHtml } from "../../../myHtml.js";
 import { passwordCheck } from "./createAccount.js";
-import { getSecret } from "../../getSecret.js";
-
-const SERVER_ADDR = await getSecret('server_addr', 'server-addr');
+import { getSecret, getServerAddr } from "../../getSecret.js";
 
 async function sendEmail(inputText) {
     console.log("entra en sendEmail");
 
+    const SERVER_ADDR = await getSecret('server_addr', 'server-addr');
     const res = await fetch(`${SERVER_ADDR}/backend/check-email-exists`, {
         method: 'POST',
         headers: {
@@ -60,11 +59,11 @@ function EscTriggered(event) {
 
 async function createEmailPopup() {
     const overlay = document.createElement('div');
-    overlay.className = 'overlay-popup';
+    overlay.classList.add('overlay-popup');
     overlay.id = 'overlay-popup-forgotpass';
 
     const popup = document.createElement('div');
-    popup.className = 'popup';
+    popup.classList.add('popup', 'popup-transition');
 
     const CloseTabDiv = MyHtml.createSubElement2(popup, 'div', 'div-row', '100%', '10%');
     CloseTabDiv.style.justifyContent = 'right';
@@ -120,7 +119,7 @@ export async function forgotPasswordCall() {
 
 async function changePasswordCall(input, token) {
     console.log('changePassword called ' + input);
-
+    const SERVER_ADDR = await getSecret('server_addr', 'server-addr');
     const res = await fetch(`${SERVER_ADDR}/backend/reset-password`, {
         method: 'POST',
         headers: {

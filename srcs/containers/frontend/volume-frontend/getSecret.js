@@ -1,3 +1,8 @@
+export async function getServerAddr() {
+    const data = await getSecret('server_addr', 'server-addr');
+    return data;
+}
+
 export async function getSecret(apiUrl, key) {
     const res = await fetch(`https://localhost:8443/backend/fetch-secret`, {
         method: 'POST',

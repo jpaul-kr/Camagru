@@ -1,9 +1,8 @@
-import { getSecret } from "../../getSecret.js";
-
-const SERVER_ADDR = await getSecret('server_addr', 'server-addr');
+import { getSecret, getServerAddr } from "../../getSecret.js";
 
 export async function checkData(username, email, password) {
     try {
+        const SERVER_ADDR = await getSecret('server_addr', 'server-addr');
         const response = await fetch(`${SERVER_ADDR}/backend/check-user-data`, {
             method: 'POST',
             headers: {
@@ -21,6 +20,7 @@ export async function checkData(username, email, password) {
 
 export async function sendConfirmationEmail(username, email, password) {
     try {
+        const SERVER_ADDR = await getSecret('server_addr', 'server-addr');
         const response = await fetch(`${SERVER_ADDR}/backend/send-confirmation-email`, {
             method: 'POST',
             headers: {
@@ -38,6 +38,7 @@ export async function sendConfirmationEmail(username, email, password) {
 
 export async function registerUser(username, email, password) {
     try {
+        const SERVER_ADDR = await getSecret('server_addr', 'server-addr');
         const response = await fetch(`${SERVER_ADDR}/backend/register-user`, {
             method: 'POST',
             headers: {

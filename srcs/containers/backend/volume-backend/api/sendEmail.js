@@ -54,7 +54,7 @@ export async function sendConfirmationEmail(req, res) {
                     <p>please confirm your email:</p>
                 </div>
                 <div>
-                    <a href="http://localhost:8443/backend/register-user?token=${token}">Confirm Email</a>
+                    <a href="https://localhost:8443/backend/register-user?token=${token}">Confirm Email</a>
                 </div>`;
             addToPendingUsers(username, email, password, token);
             sendEmail(email, htmlcontent);
@@ -85,7 +85,7 @@ export async function sendForgotPasswordEmail(req, res) {
                     <p>Click the link bellow to change your password:</p>
                 </div>
                 <div>
-                    <a href="http://localhost:8443/reset-password?token=${token}">Change password</a>
+                    <a href="https://localhost:8443/reset-password?token=${token}">Change password</a>
                 </div>`;
             addToChangePassword(email, token);
             sendEmail(email, htmlcontent);

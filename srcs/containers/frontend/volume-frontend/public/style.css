@@ -319,6 +319,15 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    transition: 0.2s ease;
+    transition: transform 0.2s ease;
     cursor: pointer;
+}
+
+.popup-transition {
+    transition-duration: 0.3s;
+}
+
+.left-to-right {
+    transform: translateX(40px);
+    transition: transform 0.3s ease;
 }

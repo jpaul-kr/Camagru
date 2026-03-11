@@ -22,7 +22,7 @@ function loadStyles(cssPath, faviconPath) {
 
 function createTop() {
     const top = document.createElement('div');
-    top.classList.add('top');S
+    top.classList.add('top');
 
     const title = document.createElement('h1');
     title.classList.add('title');

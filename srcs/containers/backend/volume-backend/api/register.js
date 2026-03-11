@@ -90,7 +90,7 @@ export async function registerUser(req, res) {
     try {
         console.log('registerUser called');
         const conn = await db.getConnection();
-        const token = new URL(req.url, `http://${req.headers.host}`).searchParams.get('token');
+        const token = new URL(req.url, `https://${req.headers.host}`).searchParams.get('token');
 
         const rows = await conn.query('SELECT * FROM pending_users WHERE token = ?', [token]);
         if (rows.length === 0) {
@@ -105,7 +105,7 @@ export async function registerUser(req, res) {
         await conn.query('DELETE FROM pending_users WHERE token = ?', [token]);
         conn.release();
         res.writeHead(302, {
-            Location: "http://localhost:8443?confirmed=true"
+            Location: "https://localhost:8443?confirmed=true"
         });
         res.end(JSON.stringify({success: true}));
     }

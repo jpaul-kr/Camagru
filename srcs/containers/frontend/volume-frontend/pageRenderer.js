@@ -2,9 +2,7 @@ import { loginPage } from "./pages/login/login.js";
 import { createAccountPage } from "./pages/login/createAccount.js";
 import { changePasswordPage } from "./pages/login/forgotPassword.js";
 import { homePage } from "./pages/home/homePage.js";
-import { getSecret } from "./getSecret.js";
-
-const SERVER_ADDR = await getSecret('server_addr', 'server-addr');
+import { getSecret} from "./getSecret.js";
 
 export function gotoLogin() {
     history.pushState({}, '', '/login');
@@ -45,6 +43,7 @@ export function pageRenderer(main) {
 
 export async function authCookie() {
     console.log('enters auth Cookie');
+    const SERVER_ADDR = await getSecret('server_addr', 'server-addr');
     const res = await fetch(`${SERVER_ADDR}/backend/check-cookie`, {
         method: 'GET',
         credentials: 'include'
